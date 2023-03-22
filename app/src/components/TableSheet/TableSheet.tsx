@@ -61,7 +61,7 @@ export default function TableSheet({
   // ----------------------------------- Options
   const s2Options = {
     // width: defaultWidth,
-    // height: defaultHeight,
+    height: 300,
     // showSeriesNumber: true,
     hierarchyType: 'grid', // tree
     // totals: {
@@ -197,11 +197,11 @@ export default function TableSheet({
     });
     return true;
   };
-  console.log('s2DataConfig: ', s2DataConfig);
+  console.log('s2DataConfig11111111111111111 ', s2DataConfig);
   console.log('sheetType: ', sheetType);
   return (
     s2DataConfig && (
-      <Flex column fill {...flexProps} style={{ minHeight: 150 /*, border: '1px solid green' */ }}>
+      <Flex column {...flexProps} style={{ minHeight: 150 /*, border: '1px solid green' */ }}>
         <Header
           dataCfg={s2DataConfig as S2DataConfig}
           options={s2Options as S2Options}
