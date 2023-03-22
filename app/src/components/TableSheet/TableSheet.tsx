@@ -82,6 +82,10 @@ export default function TableSheet({
       multiSelection: true,
       selectedCellMove: true,
     },
+    pagination: {
+      pageSize: 10,
+      current: 0,
+    },
     tooltip: {
       showTooltip: true,
       // @ts-ignore
@@ -136,6 +140,7 @@ export default function TableSheet({
     //     {  field: 'type',       name: 'type',     },
     //   ],
     if (!data?.error && data?.rows) {
+      console.log('data: ', data);
       setData({
         data: data.rows,
         fields: { columns: data.getColumns().map((o) => o.name) },
@@ -145,6 +150,7 @@ export default function TableSheet({
         //   columns: [],
         // },
         meta: data.getColumns().map((o) => {
+          console.log('o: ', o);
           return {
             field: o.name,
             name: o.name,
@@ -191,6 +197,8 @@ export default function TableSheet({
     });
     return true;
   };
+  console.log('s2DataConfig: ', s2DataConfig);
+  console.log('sheetType: ', sheetType);
   return (
     s2DataConfig && (
       <Flex column fill {...flexProps} style={{ minHeight: 150 /*, border: '1px solid green' */ }}>
@@ -212,6 +220,14 @@ export default function TableSheet({
           options={s2Options}
           themeCfg={themeCfg}
           loading={loading}
+          showPagination={{
+            onChange: (current) => {
+              console.log(current);
+            },
+            onShowSizeChange: (pageSize) => {
+              console.log(pageSize);
+            },
+          }}
         />
       </Flex>
     )

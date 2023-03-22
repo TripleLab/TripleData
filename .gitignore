@@ -4,6 +4,7 @@ dist/
 
 # Temp and caches
 node_modules/
+.yarn/
 .cache/
 .awcache/
 .DS_Store

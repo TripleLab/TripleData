@@ -51,6 +51,8 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
         return true;
       });
     }
+    console.log('defaultState: ', defaultState);
+
     if (typeof extendSettings === 'object') {
       return {
         ...defaultState,
@@ -90,6 +92,7 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
     // if (withDatabase) {
     //   url += `&database=${encodeURIComponent(withDatabase)}`;
     // }
+    console.log('url: ', url);
 
     return url;
   }
@@ -180,6 +183,7 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
     const init = this.getRequestInit(q.getSQL());
     return this.request(url, init)
       .then((r) => {
+        console.log('r: ', r);
         return { response: r, query: q as Query, error: null, isError: false } as QueryResponse;
       })
       .catch((e) => {
@@ -255,12 +259,17 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
       this.connection.username,
       this.connection.password
     );
+    console.log('this.query(sql): ', this.query(sql));
+
     return await this.query(sql);
   }
 
   async getTableColumns(database: string, tablename: string): Promise<Array<any> | undefined> {
+    console.log('2222222222');
     const r = await this.query(this.prepared().columnsList(1500, database, tablename));
     if (r.isError || !r.response.data) return undefined;
+    console.log('r.response.data: ', r.response.data);
+
     return r.response.data;
   }
 
@@ -272,6 +281,8 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
     if (r && r.response.data && r.response.data[0] && r.response.data[0].statement) {
       sql = r.response.data[0].statement;
     }
+    console.log('sql: ', sql);
+
     return sql;
   }
 }

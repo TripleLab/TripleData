@@ -40,6 +40,7 @@ class SignInView extends React.Component<RoutedProps> {
     //   this.checkVersionUpdateTabix();
     // }
     store.loadConnections();
+    this.signIn();
   }
 
   private onSelectConnection = (connection: Connection) => {
@@ -56,7 +57,6 @@ class SignInView extends React.Component<RoutedProps> {
 
   private signIn = () => {
     const { store, history } = this.props;
-
     store.signIn(history);
   };
 
@@ -91,6 +91,7 @@ class SignInView extends React.Component<RoutedProps> {
     // -----------------------------------
     // Fackig mobx drop naxui
     // Update data
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     selectedConnection.changeField({ name: 'connectionName', value: values['connectionName'] });
     Object.entries(values).forEach(([key, value]) => {
@@ -102,6 +103,7 @@ class SignInView extends React.Component<RoutedProps> {
   render() {
     const { store } = this.props;
     //pass:checkVersionUpdateTabix123
+    return <div></div>;
     return (
       <Page column={false} uiStore={store.uiStore}>
         <Splitter>

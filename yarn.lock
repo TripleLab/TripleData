@@ -4677,7 +4677,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"clean-webpack-plugin@npm:^4.0.0":
+"clean-webpack-plugin@npm:4.0.0":
   version: 4.0.0
   resolution: "clean-webpack-plugin@npm:4.0.0"
   dependencies:
@@ -5086,7 +5086,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"copy-webpack-plugin@npm:^10.1.0":
+"copy-webpack-plugin@npm:10.1.0":
   version: 10.1.0
   resolution: "copy-webpack-plugin@npm:10.1.0"
   dependencies:
@@ -6627,7 +6627,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"eslint-webpack-plugin@npm:^3.1.1":
+"eslint-webpack-plugin@npm:3.1.1":
   version: 3.1.1
   resolution: "eslint-webpack-plugin@npm:3.1.1"
   dependencies:
@@ -16300,9 +16300,9 @@ __metadata:
     babel-eslint: ^10.0.1
     babel-jest: ^27.5.0
     classnames: ^2.2.6
-    clean-webpack-plugin: ^4.0.0
+    clean-webpack-plugin: 4.0.0
     compression-webpack-plugin: 4.0.1
-    copy-webpack-plugin: ^10.1.0
+    copy-webpack-plugin: 10.1.0
     cross-env: ^5.2.0
     css-loader: ^2.1.0
     downshift: ^3.1.8
@@ -16318,7 +16318,7 @@ __metadata:
     eslint-plugin-react: ^7.28.0
     eslint-plugin-react-hooks: ^4.3.0
     eslint-plugin-typescript: ^0.14.0
-    eslint-webpack-plugin: ^3.1.1
+    eslint-webpack-plugin: 3.1.1
     file-loader: 5.1.0
     fork-ts-checker-webpack-plugin: ^6.5.0
     funfix-core: ^7.0.1
@@ -16376,10 +16376,10 @@ __metadata:
     url-loader: 3.0.0
     uuid: 8.3.2
     valtors: ^1.5.0
-    webpack: ^5.65.0
-    webpack-bundle-analyzer: ^4.5.0
-    webpack-cli: ^4.9.2
-    webpack-dev-server: ^4.7.4
+    webpack: 5.65.0
+    webpack-bundle-analyzer: 4.5.0
+    webpack-cli: 4.9.2
+    webpack-dev-server: 4.7.4
   languageName: unknown
   linkType: soft
 
@@ -17570,7 +17570,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-bundle-analyzer@npm:^4.5.0":
+"webpack-bundle-analyzer@npm:4.5.0":
   version: 4.5.0
   resolution: "webpack-bundle-analyzer@npm:4.5.0"
   dependencies:
@@ -17589,7 +17589,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-cli@npm:^4.9.2":
+"webpack-cli@npm:4.9.2":
   version: 4.9.2
   resolution: "webpack-cli@npm:4.9.2"
   dependencies:
@@ -17637,7 +17637,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:^4.7.4":
+"webpack-dev-server@npm:4.7.4":
   version: 4.7.4
   resolution: "webpack-dev-server@npm:4.7.4"
   dependencies:
@@ -17709,7 +17709,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack@npm:^5.65.0":
+"webpack@npm:5.65.0":
   version: 5.65.0
   resolution: "webpack@npm:5.65.0"
   dependencies:

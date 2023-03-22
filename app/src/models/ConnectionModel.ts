@@ -27,14 +27,14 @@ export abstract class BaseConnectionModel<T extends Connection>
 
   @required()
   @observable
-  connectionUrl = '';
+  connectionUrl = 'http://192.168.31.151:8123';
 
   @required()
   @observable
-  username = '';
+  username = 'test';
 
   @observable
-  password = '';
+  password = 'test';
 
   version = '';
 
@@ -56,10 +56,10 @@ export class DirectConnectionModel
   mode?: ConnectionMode;
 
   constructor({
-    connectionName = '',
-    connectionUrl = '',
-    username = '',
-    password = '',
+    connectionName = 'test',
+    connectionUrl = 'http://192.168.31.151:8123',
+    username = 'test',
+    password = 'test',
     mode = ConnectionMode.normal,
     params,
   }: Partial<DirectConnection>) {
