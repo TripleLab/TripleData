@@ -63,7 +63,7 @@ const devServer = {
 
   historyApiFallback: true,
   host: devServerHost,
-  port: 9000,
+  port: 6080,
   compress: true,
   hot: true,
   liveReload: true,

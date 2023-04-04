@@ -3,9 +3,26 @@
   top: 0;
   overflow: auto;
   max-height: 100vh;
+  padding: 18px 12px;
+  background: #353B46;
 }
 
 .baseContent {
   /*border-left: 1px solid black;*/
   /*border-bottom: 1px solid crimson;*/
 }
+
+.sider-container input  {
+  background: #1D1D1D;
+}
+
+.sider-container button  {
+  background: #1D1D1D;
+}
+
+.sider-container button:hover  {
+  background: #1D1D1D !important;
+  border: none;
+}
+
+.sider-container div::-webkit-scrollbar { width: 0 }

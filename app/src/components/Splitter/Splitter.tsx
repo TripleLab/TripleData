@@ -10,8 +10,8 @@ export default function Splitter({
   return (
     <SplitPane
       split="vertical"
-      minSize={350}
-      defaultSize={350}
+      // minSize={1350}
+      defaultSize={1350}
       className={classNames(css.root, className)}
       {...rest}
     />

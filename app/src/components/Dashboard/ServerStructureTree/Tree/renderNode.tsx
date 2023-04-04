@@ -100,7 +100,7 @@ function ExpandableRenderer({ node, onChange, children }: RenderNodeProps) {
       alignItems="center"
       onClick={toggle}
       onDoubleClick={toggle}
-      style={{ paddingLeft: `calc(${node.deepness} * 1em)` }}
+      style={{ paddingLeft: `calc(${node.deepness} * 1em)`, color: '#FFFFFF', opacity: '0.8' }}
     >
       <i
         className={classNames(

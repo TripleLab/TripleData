@@ -19,6 +19,8 @@ import Draw from 'components/Draw';
 import Progress from './Progress';
 import { TabsTabPane } from './Tabs/Tabs';
 import FullScreener from './FullScreener';
+import { color } from 'echarts';
+import { Table } from 'antd';
 
 interface Props {
   store: TabsStore;
@@ -47,6 +49,8 @@ export default class EditorTabPage extends React.Component<Props> {
   };
 
   private onEditorAction = (action: EditorActionType, eventData?: any) => {
+    console.log('eventData: ', eventData);
+    console.log('action: ', action);
     switch (action) {
       case EditorActionType.Save: {
         const { store } = this.props;
@@ -168,23 +172,95 @@ export default class EditorTabPage extends React.Component<Props> {
     const { store, serverStructure, model, width } = this.props;
     const resultList = model.queriesResult.map((r) => r.list).getOrElse([]);
 
+    let data = resultList[0]?.result.value;
+    let t = JSON.stringify(data);
+    console.log('t: ', t);
+    let dataList = [];
+    let columns = [];
+    if (t) {
+      console.log('t: ', JSON.parse(t).meta.columns);
+      console.log('t: ', JSON.parse(t).rows);
+      dataList = JSON.parse(t).rows;
+      columns = JSON.parse(t).meta.columns.map((e: { name: any }) => {
+        return {
+          title: e.name,
+          dataIndex: e.name,
+          // ellipsis:true,
+          width: 150,
+          textWrap: 'none',
+          // render: (_: any, record: any) => (
+          //   <div style={{ whiteSpace: 'nowrap' }}>{record[e.name]}</div>
+          // ),
+        };
+      });
+    }
     return (
       <React.Fragment>
-        <FullScreener enter={this.state.enterFullScreen}>
-          <Splitter split="horizontal" minSize={100} defaultSize={300}>
-            <SqlEditor
-              content={model.content}
-              onContentChange={this.onContentChange}
-              serverStructure={serverStructure}
-              currentDatabase={model.currentDatabase.getOrElse('')}
-              onDatabaseChange={this.onDatabaseChange}
-              onAction={this.onEditorAction}
-              stats={model.queriesResult.map((_) => _.totalStats).orUndefined()}
-              ref={this.setEditorRef}
-              fill
-            />
+        <Splitter split="horizontal" minSize={100} defaultSize={300}>
+          <SqlEditor
+            content={model.content}
+            onContentChange={this.onContentChange}
+            serverStructure={serverStructure}
+            currentDatabase={model.currentDatabase.getOrElse('')}
+            onDatabaseChange={this.onDatabaseChange}
+            onAction={this.onEditorAction}
+            stats={model.queriesResult.map((_) => _.totalStats).orUndefined()}
+            ref={this.setEditorRef}
+            fill
+          />
 
-            <div>
+          {/* position: 'absolute'  */}
+          <div style={{}}>
+            <div
+              style={{
+                paddingTop: '10px',
+                paddingLeft: '20px',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <div style={{ color: '#ffffff', fontSize: '16px' }}>Result</div>
+              {/* {!!store.uiStore.executingQueries.length && ( */}
+              {/* <Progress queries={store.uiStore.executingQueries} /> */}
+              {/* )} */}
+
+              {resultList.length > 0 && (
+                  <DataItemsLayout
+                    onResize={this.onResizeGrid}
+                    cols={4}
+                    itemWidth={4}
+                    itemHeight={10}
+                    items={resultList}
+                    width={width}
+                    renderItem={this.renderTable}
+                    locked={model.pinnedResult}
+                  />
+
+                  // <Table columns={columns} dataSource={dataList} scroll={{ x: 1500, y: 300 }} />
+                )}
+
+                
+              {/* <div style={{ bottom: '0', position: 'absolute' }}>
+                {' '}
+                {resultList.length > 0 && (
+                  // <DataItemsLayout
+                  //   onResize={this.onResizeGrid}
+                  //   cols={4}
+                  //   itemWidth={4}
+                  //   itemHeight={10}
+                  //   items={resultList}
+                  //   width={width}
+                  //   renderItem={this.renderTable}
+                  //   locked={model.pinnedResult}
+                  // />
+
+                  <Table columns={columns} dataSource={dataList} scroll={{ x: 1500, y: 300 }} />
+                )}
+              </div> */}
+            </div>
+          </div>
+
+          {/* <div>
               {model.tableData.map((data) => <div>{data}</div>).orUndefined()}
 
               <Tabs
@@ -192,7 +268,7 @@ export default class EditorTabPage extends React.Component<Props> {
                 pinned={model.pinnedResult}
                 onAction={this.onResultTabAction}
               >
-                <TabsTabPane key="table" tab="Data / Table" style={{ overflowY: 'auto' }}>
+                <TabsTabPane key="table" tab="Data" style={{ overflowY: 'auto' }}>
                   {!!store.uiStore.executingQueries.length && (
                     <Progress queries={store.uiStore.executingQueries} />
                   )}
@@ -208,39 +284,9 @@ export default class EditorTabPage extends React.Component<Props> {
                     locked={model.pinnedResult}
                   />
                 </TabsTabPane>
-
-                {/*<TabsTabPane key="draw" tab="Chart / Draw">*/}
-                {/*  {!!store.uiStore.executingQueries.length && (*/}
-                {/*    <Progress queries={store.uiStore.executingQueries} />*/}
-                {/*  )}*/}
-
-                {/*  <DataItemsLayout*/}
-                {/*    onResize={this.onResizeGrid}*/}
-                {/*    cols={4}*/}
-                {/*    itemWidth={4}*/}
-                {/*    itemHeight={6}*/}
-                {/*    items={resultList}*/}
-                {/*    width={width}*/}
-                {/*    renderItem={this.renderDraw}*/}
-                {/*  />*/}
-                {/*</TabsTabPane>*/}
               </Tabs>
-            </div>
-          </Splitter>
-
-          {store.editedTab
-            .filter((t) => t.model === model)
-            .map((editedTab) => (
-              <SaveModal
-                fieldName="title"
-                fieldValue={editedTab.title}
-                onFieldChange={editedTab.changeField}
-                onSave={store.saveEditedTab}
-                onCancel={store.hideSaveModal}
-              />
-            ))
-            .orUndefined()}
-        </FullScreener>
+            </div> */}
+        </Splitter>
       </React.Fragment>
     );
   }

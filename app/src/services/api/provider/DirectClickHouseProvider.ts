@@ -113,7 +113,11 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
       dictionaries: this.prepared().dictionariesList(_LimitRead),
       columns: this.prepared().columnsList(_LimitRead * 10),
     };
+    console.log('pool: ', pool);
+
     const data = await this.fetchPool(pool);
+    console.log('data: ', data);
+    
     let canSkipError = false;
     const errorMaps: Array<string> = [];
     if (!data.isOk) {
@@ -153,6 +157,10 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
     ) {
       // Create ServerStructure.Server
       try {
+        console.log('data.pool ', data.pool['tables'].response.data);
+        console.log('data.pool ', data.pool['tables']);
+        console.log('data.pool ', data.pool['columns'].response.data);
+
         return ServerStructure.from(
           data.pool['tables'].response.data,
           data.pool['databases'].response.data,

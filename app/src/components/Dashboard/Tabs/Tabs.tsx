@@ -16,7 +16,7 @@ export const Tabs: React.FC<TabsProps> = ({
   <AntdTabs
     type="editable-card"
     className={css.root}
-    tabBarExtraContent={<ActionsMenu onMenuAction={onMenuAction} />}
+    // tabBarExtraContent={<ActionsMenu onMenuAction={onMenuAction} />}
     {...rest}
   />
 );

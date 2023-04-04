@@ -8,6 +8,7 @@ import { routePaths } from 'routes';
 import { Modal, Dropdown, Menu } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { Stores, TabsStore, TreeStore } from 'stores';
+import logo_tripleDB from '../../assets/images/logo_tripleDB.png';
 import {
   DbOverviewTab,
   EditorTabModel,
@@ -180,7 +181,7 @@ class DashboardView extends React.Component<RoutedProps> {
     switch (action) {
       case ActionType.SignOut: {
         const { history } = this.props;
-        history.push(routePaths.signOut.path);
+        // history.push(routePaths.signOut.path);
         break;
       }
       case ActionType.Help: {
@@ -250,86 +251,113 @@ class DashboardView extends React.Component<RoutedProps> {
         {/*<Menu.Item key={`${TabRightMenuAction.PinTab}#${id}`}>Pin tab</Menu.Item>*/}
       </Menu>
     );
+    console.log('tabsStore.tabs: ', tabsStore.tabs);
 
     return (
-      <Page column={false} uiStore={tabsStore.uiStore}>
-        <NavPrompt when={isBlocking} message="Do you want to leave this page?" />
-
-        <Splitter
-          primary="second"
-          minSize={100}
-          maxSize={-100}
-          defaultSize="calc(100vw - 225px)"
-          size={uiStore.primaryPaneSize}
-          onDragFinished={uiStore.updatePrimaryPaneSize}
+      <>
+        <div
+          style={{
+            height: '70px',
+            background: '#282F3E',
+            display: 'flex',
+            alignItems: 'center',
+          }}
         >
-          <Flex alignItems="flex-start" vfill className={css['sider-container']}>
-            <ServerStructureTree
-              onServerAction={this.onServerAction}
-              onTableAction={this.onTableAction}
-              onColumnAction={this.onColumnAction}
-              onCommandAction={this.onCommandAction}
-            />
-          </Flex>
-          <Flex fill={true} column hfill className={css.baseContent}>
-            <Tabs
-              activeKey={tabsStore.activeTab.map((_) => _.id).orUndefined()}
-              onEdit={this.onEditTabs}
-              onChange={tabsStore.setActiveTab}
-              onMenuAction={this.onMenuAction}
-            >
-              {tabsStore.tabs.map((t) => (
-                <TabsTabPane
-                  style={{ overflowY: 'scroll' }}
-                  key={t.id}
-                  closable
-                  tab={
-                    <Dropdown overlay={tabRightMenu(t.id)} trigger={['contextMenu']}>
-                      <span>
-                        {this.getTabIcon(t)}
-                        {t.title}
-                      </span>
-                    </Dropdown>
-                  }
-                >
-                  <Flex fill={true} column hfill style={{ minHeight: '96vh', maxHeight: '96vh' }}>
-                    {isTabOfType<EditorTabModel>(t, TabType.Editor) && (
-                      <EditorTabPage
-                        store={tabsStore}
-                        serverStructure={treeStore.serverStructure.orUndefined()}
-                        model={t}
-                        onModelFieldChange={t.changeField}
-                        width={uiStore.primaryPaneSize}
-                      />
-                    )}
+          <img src={logo_tripleDB} alt="" style={{ height: '40px', marginLeft: '30px' }} />
+        </div>
+        <div
+          style={{
+            height: '12px',
+            background: '#1D1D1D',
+          }}
+        ></div>
 
-                    {isTabOfType<TableViewTabModel>(t, TabType.TableView) && (
-                      <TableViewTabPage
-                        serverStructure={treeStore.serverStructure.orUndefined()}
-                        model={t}
-                      />
-                    )}
+        <Page column={false} uiStore={tabsStore.uiStore}>
+          <NavPrompt when={isBlocking} message="Do you want to leave this page?" />
 
-                    {isTabOfType<ProcessesTabModel>(t, TabType.Processes) && <ProcessesTabPage />}
+          <Splitter
+            primary="second"
+            minSize={950}
+            maxSize={-396}
+            defaultSize="calc(100vw - 396px)"
+            size={uiStore.primaryPaneSize}
+            onDragFinished={uiStore.updatePrimaryPaneSize}
+          >
+            <Flex alignItems="flex-start" vfill className={css['sider-container']}>
+              <ServerStructureTree
+                onServerAction={this.onServerAction}
+                onTableAction={this.onTableAction}
+                onColumnAction={this.onColumnAction}
+                onCommandAction={this.onCommandAction}
+              />
+            </Flex>
+            <Flex fill={true} column hfill className={css.baseContent}>
+              <Tabs
+                activeKey={tabsStore.activeTab.map((_) => _.id).orUndefined()}
+                onEdit={this.onEditTabs}
+                onChange={tabsStore.setActiveTab}
+                onMenuAction={this.onMenuAction}
+                style={{ height: '100%' }}
+              >
+                {tabsStore.tabs.map((t) => (
+                  <TabsTabPane
+                    // style={{ background: 'red' }}
+                    key={t.id}
+                    closable
+                    tab={
+                      <Dropdown overlay={tabRightMenu(t.id)} trigger={['contextMenu']}>
+                        <span>
+                          {this.getTabIcon(t)}
+                          {t.title + '2222'}
+                        </span>
+                      </Dropdown>
+                    }
+                  >
+                    {/* minHeight: '86vh', maxHeight: '86vh', */}
+                    <Flex
+                      fill={true}
+                      column
+                      hfill
+                      style={{ background: '#282F3E', height: '100%' }}
+                    >
+                      {isTabOfType<EditorTabModel>(t, TabType.Editor) && (
+                        <EditorTabPage
+                          store={tabsStore}
+                          serverStructure={treeStore.serverStructure.orUndefined()}
+                          model={t}
+                          onModelFieldChange={t.changeField}
+                          width={uiStore.primaryPaneSize}
+                        />
+                      )}
 
-                    {isTabOfType<MetricsTabModel>(t, TabType.Metrics) && <MetricsTabPage />}
+                      {isTabOfType<TableViewTabModel>(t, TabType.TableView) && (
+                        <TableViewTabPage
+                          serverStructure={treeStore.serverStructure.orUndefined()}
+                          model={t}
+                        />
+                      )}
 
-                    {isTabOfType<ServerOverviewTab>(t, TabType.ServerOverview) && (
-                      <ServerOverviewTabPage store={tabsStore} />
-                    )}
+                      {isTabOfType<ProcessesTabModel>(t, TabType.Processes) && <ProcessesTabPage />}
 
-                    {isTabOfType<DbOverviewTab>(t, TabType.DbOverview) && <DbOverviewTabPage />}
+                      {isTabOfType<MetricsTabModel>(t, TabType.Metrics) && <MetricsTabPage />}
 
-                    {isTabOfType<SqlHistoryTab>(t, TabType.SqlHistory) && (
-                      <SqlHistoryTabPage onEdit={tabsStore.openNewEditorTab} />
-                    )}
-                  </Flex>
-                </TabsTabPane>
-              ))}
-            </Tabs>
-          </Flex>
-        </Splitter>
-      </Page>
+                      {isTabOfType<ServerOverviewTab>(t, TabType.ServerOverview) && (
+                        <ServerOverviewTabPage store={tabsStore} />
+                      )}
+
+                      {isTabOfType<DbOverviewTab>(t, TabType.DbOverview) && <DbOverviewTabPage />}
+
+                      {isTabOfType<SqlHistoryTab>(t, TabType.SqlHistory) && (
+                        <SqlHistoryTabPage onEdit={tabsStore.openNewEditorTab} />
+                      )}
+                    </Flex>
+                  </TabsTabPane>
+                ))}
+              </Tabs>
+            </Flex>
+          </Splitter>
+        </Page>
+      </>
     );
   }
 }

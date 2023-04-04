@@ -63,40 +63,12 @@ export default class Toolbar extends React.Component<ToolbarProps & FlexProps> {
     );
 
     return (
-      <Flex alignItems="center" {...rest}>
-        <Flex shrink={false}>
-          <SpaceH />
-          <Dropdown.Button size="small" onClick={onActionRunRunCurrent} overlay={menu}>
-            <CaretRightOutlined style={{ color: 'green' }} />
-            <b>Run current</b>
-          </Dropdown.Button>
+      <Flex alignItems="center" justifyContent="flex-end" style={{ background: 'rgb(30,30,30)' }}>
+        <div className={css['button']} onClick={onActionRunRunCurrent}>
+          Run Current
+        </div>
 
-          <SpaceH />
-
-          {/*/!*icon="save"*!/*/}
-          {/*<ActionButton size="small" actionType={ActionType.Save} onAction={onAction}>*/}
-          {/*  <SaveOutlined />*/}
-          {/*</ActionButton>*/}
-
-          <SpaceH />
-
-          {/*<Select*/}
-          {/*  size="small"*/}
-          {/*  dropdownMatchSelectWidth={false}*/}
-          {/*  value={currentDatabase}*/}
-          {/*  onChange={this.onDatabaseChange}*/}
-          {/*>*/}
-          {/*  {databases.map((db) => (*/}
-          {/*    <Select.Option key={db.name} value={db.name}>*/}
-          {/*      {db.name}*/}
-          {/*    </Select.Option>*/}
-          {/*  ))}*/}
-          {/*</Select>*/}
-
-          <SpaceH />
-        </Flex>
-
-        <Flex grow justifyContent="flex-end">
+        {/* <Flex grow justifyContent="flex-end">
           {stats && (
             <>
               <SpaceH />
@@ -105,7 +77,7 @@ export default class Toolbar extends React.Component<ToolbarProps & FlexProps> {
           )}
 
           <SpaceH />
-        </Flex>
+        </Flex> */}
       </Flex>
     );
   }

@@ -94,13 +94,13 @@ export const Header: FC<HeaderProps> = ({
       <Col span={18} push={6}>
         {title}
       </Col>
-      <Col span={6} pull={18}>
+      {/* <Col span={6} pull={18}>
         <Popover content={pop} title="Table settings ...">
           <Button icon={<SettingOutlined />} size={'small'}>
             Setting table
           </Button>
         </Popover>
-      </Col>
+      </Col> */}
     </Row>
   );
 };

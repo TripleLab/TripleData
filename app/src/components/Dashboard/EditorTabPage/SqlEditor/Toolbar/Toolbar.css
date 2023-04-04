@@ -2,3 +2,19 @@
   padding-left: 0.25em;
   padding-right: 0.25em;
 }
+
+.button {
+  width: 168px;
+  height: 42px;
+  border-radius: 4px 4px 4px 4px;
+  opacity: 1;
+  border: 2px solid #5B616F;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: #ffffff;
+  cursor: pointer;
+  background-color: #34373C;
+  margin-right: 36px;
+}

@@ -8,6 +8,10 @@
       height: 30px !important;
     }
 
+    & .ant-tabs-content{
+      height: 100%;
+    }
+
     & .ant-tabs-top > .ant-tabs-nav {
       border-bottom: unset;
       margin-bottom: 0;
@@ -23,7 +27,7 @@
       }
 
       & .ant-tabs-tab {
-        color: silver;
+        color: #282F3E;
         line-height: 26px !important;
         background: unset !important;
         /* border: unset !important; */
@@ -32,6 +36,7 @@
         /* padding-left: 9px !important; */
         margin-right: 0;
         border-radius: unset !important;
+        background: #282F3E;
 
         & .anticon {
           margin-right: 3px;
@@ -39,4 +44,8 @@
       }
     }
   }
+}
+
+.ant-tabs-tab {
+  background: red;
 }

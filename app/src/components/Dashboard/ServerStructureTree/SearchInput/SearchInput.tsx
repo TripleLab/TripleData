@@ -7,6 +7,7 @@ import { TypedNode } from 'stores/TreeStore';
 import { TreeFilter } from 'models';
 import AutoCompleteOptions, { AutoCompleteOptionsProps } from './AutoCompleteOptions';
 import css from './SearchInput.css';
+const { Search } = Input;
 
 interface Props extends Pick<AutoCompleteOptionsProps, 'model' | 'items'> {
   onModelFieldChange: FieldChangeHandler<TreeFilter>;
@@ -52,7 +53,8 @@ export default class SearchInput extends React.Component<Props> {
       >
         {({ getInputProps, getMenuProps, isOpen, getItemProps, highlightedIndex }) => (
           <div className={css.root}>
-            <Input.Search placeholder="Search" {...getInputProps()} />
+            {/* <Input.Search placeholder="Search" {...getInputProps()} /> */}
+            <Search placeholder="Search" {...getInputProps()} style={{ }} />
 
             {isOpen && (
               <AutoCompleteOptions

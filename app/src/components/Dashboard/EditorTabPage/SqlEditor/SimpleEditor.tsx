@@ -241,7 +241,7 @@ export default class SimpleEditor extends React.Component<SimpleEditorProps> {
         onChange={this.onChange}
         beforeMount={this.onEditorBeforeMount}
         options={this.monacoEditorOptions}
-        theme="cobalt"
+        theme="vs-dark"
         value={content}
       />
     );

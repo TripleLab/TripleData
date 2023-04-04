@@ -114,6 +114,9 @@ export default class TreeStore extends ApiRequestableStore<DashboardUIStore> {
     server: ServerStructure.Server,
     attachItem: ServerStructure.SpecialArrayGroupItem
   ) {
+    console.log('server: ', server);
+    console.log('attachItem: ', attachItem);
+
     const children = server.databases.map((d) => ({
       ...d,
       children: d.tables.map((t) => ({
@@ -130,11 +133,14 @@ export default class TreeStore extends ApiRequestableStore<DashboardUIStore> {
       attachItem.children.forEach((n) => {
         cc.push(n);
       });
+      console.log('cc: ', cc);
+      console.log('server: ', server);
+
     this.treeNodes = [
       {
         ...server,
         state: { expanded: true },
-        children: cc,
+        children: cc.filter(k =>k.name === "default"),
       },
     ];
     // ToDo: fix selectDbNode if change connection, assign select_db to host`s

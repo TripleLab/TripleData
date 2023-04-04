@@ -120,6 +120,11 @@ export default class preparedStatementQuery extends TemplateQuery {
     });
   }
 
+
+
+
+  
+
   columnsList(limit = 500, database: string | null = null, table: string | null = null): string {
     return this.template(
       `SELECT *

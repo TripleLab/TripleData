@@ -63,9 +63,10 @@ class ServerStructureTree extends React.Component<Props> {
 
   render() {
     const { store, children, ...actions } = this.props;
+    console.log('store22222222222: ', store);
 
     return (
-      <Flex column fill>
+      <Flex column fill id={'test'}>
         <SearchInput
           model={store.treeFilter}
           onModelFieldChange={store.treeFilter.changeField}
@@ -73,7 +74,6 @@ class ServerStructureTree extends React.Component<Props> {
           doFilter={store.filter}
           onSelect={this.highlightNode}
         />
-
         <Tree
           highlightedId={store.highlightedId}
           nodes={store.treeNodes}
