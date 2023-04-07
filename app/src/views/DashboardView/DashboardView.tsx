@@ -8,7 +8,7 @@ import { routePaths } from 'routes';
 import { Modal, Dropdown, Menu } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { Stores, TabsStore, TreeStore } from 'stores';
-import logo_tripleDB from '../../assets/images/logo_tripleDB.png';
+
 import {
   DbOverviewTab,
   EditorTabModel,
@@ -55,7 +55,7 @@ import {
 } from 'components/Dashboard/ServerStructureTree';
 import Splitter from 'components/Splitter';
 import css from './DashboardView.css';
-
+const logo = require('../../assets/images/logo_tripleDB.png');
 interface InjectedProps {
   treeStore: TreeStore;
   tabsStore: TabsStore;
@@ -264,7 +264,7 @@ class DashboardView extends React.Component<RoutedProps> {
               alignItems: 'center',
             }}
           >
-            <img src={logo_tripleDB} alt="" style={{ height: '40px', marginLeft: '30px' }} />
+            <img src={logo} alt="" style={{ height: '40px', marginLeft: '30px' }} />
           </div>
           <div
             style={{

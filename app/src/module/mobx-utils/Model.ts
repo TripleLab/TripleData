@@ -69,7 +69,6 @@ export default class Model<Entity extends object> implements ModelLike<Entity> {
     let prevValue: Entity[K];
     let name: K;
     // change store's field immediately for performance purpose
-    console.log('event.target: ', event.target);
 
     if (isInputEventLike(event)) {
       event.preventDefault && event.preventDefault();
