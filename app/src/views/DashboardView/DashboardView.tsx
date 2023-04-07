@@ -8,7 +8,7 @@ import { routePaths } from 'routes';
 import { Modal, Dropdown, Menu } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { Stores, TabsStore, TreeStore } from 'stores';
-
+import logo from '../../assets/images/logo_tripleDB.png'
 import {
   DbOverviewTab,
   EditorTabModel,
@@ -55,7 +55,6 @@ import {
 } from 'components/Dashboard/ServerStructureTree';
 import Splitter from 'components/Splitter';
 import css from './DashboardView.css';
-const logo = require('../../assets/images/logo_tripleDB.png');
 interface InjectedProps {
   treeStore: TreeStore;
   tabsStore: TabsStore;
@@ -316,7 +315,7 @@ class DashboardView extends React.Component<RoutedProps> {
                         <Dropdown overlay={tabRightMenu(t.id)} trigger={['contextMenu']}>
                           <span>
                             {this.getTabIcon(t)}
-                            {t.title + '2222'}
+                            {t.title}
                           </span>
                         </Dropdown>
                       }
