@@ -1,10 +1,10 @@
 export default {
-  home: { path: '/' },
+  home: { path: '/data' },
 
-  signIn: { path: '/signin' },
-  signOut: { path: '/signout' },
+  signIn: { path: '/data/signin' },
+  signOut: { path: '/data/signout' },
 
-  dashboard: { path: '/dashboard' },
+  dashboard: { path: '/data/dashboard' },
   // processes: { path: '/processes' },
   // metrics: { path: '/metrics' },
   // overview: {
