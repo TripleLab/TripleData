@@ -42,6 +42,7 @@ export default class Page extends React.Component<Props> {
               ),
             });
           } else {
+            return;
             notification.open({
               key: n.id.toString(),
               type: n.type,

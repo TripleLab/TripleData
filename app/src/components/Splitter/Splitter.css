@@ -3,9 +3,9 @@
 :global {
   :local(.root) {
     &.SplitPane {
-      position: relative !important;
+      /* position: relative !important;
       height: auto !important;
-      overflow: visible !important; /* for showing context menu of the monaco editor */
+      overflow: visible !important;  */
     }
 
     & .Resizer {

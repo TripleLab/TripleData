@@ -20,7 +20,11 @@ import Progress from './Progress';
 import { TabsTabPane } from './Tabs/Tabs';
 import FullScreener from './FullScreener';
 import { color } from 'echarts';
-import { Table } from 'antd';
+// import { Table } from 'antd';
+import { Table, Pagination } from '@douyinfe/semi-ui';
+import './EditorTabPage.css';
+import RequestStats from '../EditorTabPage/RequestStats';
+import { Statistics } from 'services/api/DataDecorator';
 
 interface Props {
   store: TabsStore;
@@ -35,6 +39,7 @@ export default class EditorTabPage extends React.Component<Props> {
   state = {
     enterFullScreen: false,
   };
+  stats?: Statistics;
 
   private onContentChange = (content: string) => {
     this.props.onModelFieldChange({ name: 'content', value: content });
@@ -171,22 +176,41 @@ export default class EditorTabPage extends React.Component<Props> {
   render() {
     const { store, serverStructure, model, width } = this.props;
     const resultList = model.queriesResult.map((r) => r.list).getOrElse([]);
+    console.log('resultList: ', resultList);
+
+    const handleRow = (record: any, index: any) => {
+      // 给偶数行设置斑马纹
+      if (index % 2 === 0) {
+        return {
+          style: {
+            background: '#16161a',
+          },
+        };
+      } else {
+        return {};
+      }
+    };
 
     let data = resultList[0]?.result.value;
     let t = JSON.stringify(data);
-    console.log('t: ', t);
+    let stats: any = {
+      timeElapsed: 0,
+      rowsRead: 0,
+      bytesRead: 0,
+    };
     let dataList = [];
     let columns = [];
     if (t) {
       console.log('t: ', JSON.parse(t).meta.columns);
       console.log('t: ', JSON.parse(t).rows);
       dataList = JSON.parse(t).rows;
+      stats = JSON.parse(t).stats;
       columns = JSON.parse(t).meta.columns.map((e: { name: any }) => {
         return {
           title: e.name,
           dataIndex: e.name,
           // ellipsis:true,
-          width: 150,
+          width: 200,
           textWrap: 'none',
           // render: (_: any, record: any) => (
           //   <div style={{ whiteSpace: 'nowrap' }}>{record[e.name]}</div>
@@ -210,37 +234,60 @@ export default class EditorTabPage extends React.Component<Props> {
           />
 
           {/* position: 'absolute'  */}
-          <div style={{}}>
-            <div
-              style={{
-                paddingTop: '10px',
-                paddingLeft: '20px',
-                display: 'flex',
-                flexDirection: 'column',
-              }}
-            >
-              <div style={{ color: '#ffffff', fontSize: '16px' }}>Result</div>
-              {/* {!!store.uiStore.executingQueries.length && ( */}
-              {/* <Progress queries={store.uiStore.executingQueries} /> */}
-              {/* )} */}
+          <div
+            style={{
+              padding: '10px 20px',
+              display: 'flex',
+              flexDirection: 'column',
+            }}
+          >
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '28px' }}>
+              <div style={{ color: '#ffffff', fontSize: '18px', opacity: '0.8' }}>Result</div>
+              {stats && (
+                <RequestStats
+                  bytesRead={stats?.bytesRead}
+                  timeElapsed={stats?.timeElapsed}
+                  rowsRead={stats?.rowsRead}
+                />
+              )}
+            </div>
+            {/* {!!store.uiStore.executingQueries.length && ( */}
+            {/* <Progress queries={store.uiStore.executingQueries} /> */}
+            {/* )} */}
+            {/* <>3333333</> */}
+            {resultList.length > 0 && (
+              // <DataItemsLayout
+              //   onResize={this.onResizeGrid}
+              //   cols={4}
+              //   itemWidth={4}
+              //   itemHeight={10}
+              //   items={resultList}
+              //   width={width}
+              //   renderItem={this.renderTable}
+              //   locked={model.pinnedResult}
+              // />
+              <Table
+                columns={columns}
+                dataSource={dataList}
+                // rowSelection={rowSelection}
+                // onRow={handleRow}
+                scroll={{ y: 300, x: 1200 }}
+                pagination={{
+                  pageSize: 50,
+                  formatPageText: false,
+                  showSizeChanger: true,
+                  showTotal: true,
+                  // showQuickJumper:true,
+                  className: 'table_pagination',
+                  pageSizeOpts: [50, 100, 200],
+                  // style: {  color: '#ffffff' },
+                }}
+              />
 
-              {resultList.length > 0 && (
-                  <DataItemsLayout
-                    onResize={this.onResizeGrid}
-                    cols={4}
-                    itemWidth={4}
-                    itemHeight={10}
-                    items={resultList}
-                    width={width}
-                    renderItem={this.renderTable}
-                    locked={model.pinnedResult}
-                  />
+              // <Table columns={columns} dataSource={dataList} scroll={{ x: 1500, y: 300 }} />
+            )}
 
-                  // <Table columns={columns} dataSource={dataList} scroll={{ x: 1500, y: 300 }} />
-                )}
-
-                
-              {/* <div style={{ bottom: '0', position: 'absolute' }}>
+            {/* <div style={{ bottom: '0', position: 'absolute' }}>
                 {' '}
                 {resultList.length > 0 && (
                   // <DataItemsLayout
@@ -257,7 +304,6 @@ export default class EditorTabPage extends React.Component<Props> {
                   <Table columns={columns} dataSource={dataList} scroll={{ x: 1500, y: 300 }} />
                 )}
               </div> */}
-            </div>
           </div>
 
           {/* <div>

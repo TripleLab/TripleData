@@ -1,5 +1,5 @@
 .root {
-  & > div:not(:first-of-type)::before {
+  &>div:not(:first-of-type)::before {
     content: '|';
     padding-right: 1ch;
     margin-left: 1ch;
@@ -13,13 +13,21 @@
 }
 
 .time::after {
-  content: 'sec.';
+  content: 'sec';
 }
 
 .rows::after {
   content: 'rows';
 }
-
+/* 
 .bytes::after {
   content: '.';
+} */
+
+.time,
+.rows,
+.bytes {
+  color: #ffffff;
+  opacity: 0.5;
+  font-size: 14px
 }

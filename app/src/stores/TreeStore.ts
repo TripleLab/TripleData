@@ -140,7 +140,7 @@ export default class TreeStore extends ApiRequestableStore<DashboardUIStore> {
       {
         ...server,
         state: { expanded: true },
-        children: cc.filter(k =>k.name === "default"),
+        children: cc.filter(k =>k.name === "ethereum"),
       },
     ];
     // ToDo: fix selectDbNode if change connection, assign select_db to host`s

@@ -42,7 +42,8 @@ export default abstract class CoreProvider<C extends ConnectionLike> {
     return this.preparedQuery;
   }
 
-  protected getRequestInit(query: string): RequestInit {
+  protected getRequestInit(query: any): RequestInit {
+    console.log('query: ', query);
     const init: RequestInit = {
       mode: 'cors',
       method: 'post',
@@ -87,6 +88,8 @@ export default abstract class CoreProvider<C extends ConnectionLike> {
   // refactor: use axios?
   // For what this method?
   request(request: Request | string, init?: RequestInit) {
+    console.log('init: ', init);
+    console.log('request: ', request);
     return fetch(request, init)
       .then((response) => {
         const contentType = response.headers.get('content-type');

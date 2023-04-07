@@ -2,7 +2,7 @@ import { ConnectionType, DirectConnection } from '../../Connection';
 import ServerStructure from '../ServerStructure';
 import CoreProvider, { QueryResponse, RequestPool } from './CoreProvider';
 import { Query } from '../Query';
-
+const axios = require('axios');
 export default class DirectClickHouseProvider extends CoreProvider<DirectConnection> {
   private clusters: ReadonlyArray<ServerStructure.Cluster> | undefined;
 
@@ -51,7 +51,6 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
         return true;
       });
     }
-    console.log('defaultState: ', defaultState);
 
     if (typeof extendSettings === 'object') {
       return {
@@ -92,7 +91,6 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
     // if (withDatabase) {
     //   url += `&database=${encodeURIComponent(withDatabase)}`;
     // }
-    console.log('url: ', url);
 
     return url;
   }
@@ -101,102 +99,145 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
     return this.getDatabaseStructure(1);
   }
 
+  newAxios = async (url: any, json: any) => {
+    let key: any =
+      localStorage.getItem('login-with-metamask:auth') &&
+      JSON.parse(localStorage.getItem('login-with-metamask:auth') || '');
+    let token = 'Bearer ' + key;
+    console.log('token: ', token);
+    let callback;
+    await axios({
+      url: url,
+      method: 'post',
+      timeout: 60000,
+      headers: {
+        Authorization: token,
+      },
+      data: json,
+    }).then(function (response: any) {
+      console.log('res11111111111111111111111111ponse: ', response);
+      callback = response.data;
+    });
+    return callback;
+  };
+
   async getDatabaseStructure(_LimitRead = 5000): Promise<ServerStructure.Server> {
     // const _LimitRead = 5000;
-
+    console.log('11111111111111111111111111111');
     // Create pool of SQL-Query
     const pool: RequestPool = {
-      tables: this.prepared().databaseTablesList(_LimitRead * 2),
-      databases: this.prepared().databaseList(_LimitRead * 2),
-      functions: this.prepared().functionsList(),
-      clusters: this.prepared().clustersList(_LimitRead),
-      dictionaries: this.prepared().dictionariesList(_LimitRead),
-      columns: this.prepared().columnsList(_LimitRead * 10),
+      // tables: this.prepared().databaseTablesList(_LimitRead * 2),
+      // databases: this.prepared().databaseList(_LimitRead * 2),
+      // functions: this.prepared().functionsList(),
+      // clusters: this.prepared().clustersList(_LimitRead),
+      // dictionaries: this.prepared().dictionariesList(_LimitRead),
+      // columns: this.prepared().columnsList(_LimitRead * 10),
     };
-    console.log('pool: ', pool);
 
-    const data = await this.fetchPool(pool);
-    console.log('data: ', data);
-    
-    let canSkipError = false;
-    const errorMaps: Array<string> = [];
-    if (!data.isOk) {
-      const msg: Array<string> = ['Error in load DatabaseStructure'];
+    // const data = await this.fetchPool(pool);
 
-      data.keys.forEach((key) => {
-        const err = data.pool[key].isError;
-        let line = `Fetch ${key}, result = ` + (err ? ' Error ' : 'Ok');
-        if (err) {
-          errorMaps.push(key);
-          line = line + `Error ${data.pool[key].error} in ${data.pool[key].query.sql}`;
-          msg.push(line);
-          console.error(line);
-        }
-      });
+    // let canSkipError = false;
+    // const errorMaps: Array<string> = [];
+    // if (!data.isOk) {
+    //   const msg: Array<string> = ['Error in load DatabaseStructure'];
 
-      // check real need structure
-      if (errorMaps.includes('tables') || errorMaps.includes('databases')) {
-        canSkipError = false;
-      } else {
-        canSkipError = true;
-      }
-      //
-      console.log('Error in load DatabaseStructure, in keys = ', errorMaps);
-      //
-      if (!canSkipError) {
-        throw Error(msg.join('\n'));
-      }
-    }
+    //   data.keys.forEach((key) => {
+    //     const err = data.pool[key].isError;
+    //     let line = `Fetch ${key}, result = ` + (err ? ' Error ' : 'Ok');
+    //     if (err) {
+    //       errorMaps.push(key);
+    //       line = line + `Error ${data.pool[key].error} in ${data.pool[key].query.sql}`;
+    //       msg.push(line);
+    //     }
+    //   });
+
+    //   // check real need structure
+    //   if (errorMaps.includes('tables') || errorMaps.includes('databases')) {
+    //     canSkipError = false;
+    //   } else {
+    //     canSkipError = true;
+    //   }
+    //   //
+
+    //   //
+    //   if (!canSkipError) {
+    //     throw Error(msg.join('\n'));
+    //   }
+    // }
 
     const ConnectionName = this.connection.connectionName;
-    if (
-      'columns' in data.pool &&
-      'tables' in data.pool &&
-      'databases' in data.pool &&
-      'functions' in data.pool
-    ) {
+
+    let str =
+      ' SELECT t.database,\n' +
+      '             t.name,\n' +
+      '             t.engine,\n' +
+      '             -- t.*,\n' +
+      '             pa.size\n' +
+      '      FROM system.tables as t ANY\n' +
+      '             LEFT JOIN ( SELECT database, table as name, formatReadableSize(sum(bytes)) as size\n' +
+      '                         FROM system.parts\n' +
+      '                         GROUP BY database, name ) as pa USING (database, name)\n' +
+      '      LIMIT 11110' +
+      '     FORMAT JSON';
+    let encodedStr = btoa(str);
+
+    const url = 'http://3.22.217.3:30020/triple-account/data-analysis/querySystem';
+    let json_columns: any = {
+      sql: btoa('SELECT * FROM system.columns LIMIT 101 FORMAT JSON'),
+    };
+    let json_functions: any = {
+      sql: btoa('SELECT name, is_aggregate from system.functions FORMAT JSON'),
+    };
+    let json_databases: any = {
+      sql: btoa('SELECT name FROM system.databases LIMIT 11110 FORMAT JSON'),
+    };
+    let json_tables: any = {
+      sql: encodedStr,
+    };
+    let columnsData: any = await this.newAxios(url, json_columns);
+    let functionsData: any = await this.newAxios(url, json_functions);
+    let databasesData: any = await this.newAxios(url, json_databases);
+    let tablesData: any = await this.newAxios(url, json_tables);
+
+    if (columnsData && functionsData && databasesData && tablesData) {
       // Create ServerStructure.Server
       try {
-        console.log('data.pool ', data.pool['tables'].response.data);
-        console.log('data.pool ', data.pool['tables']);
-        console.log('data.pool ', data.pool['columns'].response.data);
-
         return ServerStructure.from(
-          data.pool['tables'].response.data,
-          data.pool['databases'].response.data,
+          tablesData.data,
+          databasesData.data,
           ConnectionName,
-          data.pool['columns'].isError ? undefined : data.pool['columns'].response.data,
-          data.pool['dictionaries'].isError ? undefined : data.pool['dictionaries'].response.data,
-          data.pool['functions'].isError ? undefined : data.pool['functions'].response.data,
-          data.pool['clusters'].isError ? undefined : data.pool['clusters'].response.data
+          columnsData.data,
+          undefined,
+          functionsData.data,
+          undefined
         );
       } catch (e) {
-        console.error('Can`t create getDatabaseStructure error on parse', e);
         throw new Error('Can`t create DatabaseStructure error on parse');
       }
     } else {
       //
-      console.error('Can`t create getDatabaseStructure', data);
       throw Error('Can`t create getDatabaseStructure');
     }
   }
 
-  public query(q: Query | string, resultAsKey = false): Promise<QueryResponse> {
+  public async query(q: Query | string, resultAsKey = false): Promise<QueryResponse> {
+    const url_sql = 'http://3.22.217.3:30020/triple-account/data-analysis/querySystem';
     if (typeof q === 'string') {
       q = new Query(q);
       q.setJsonFormat();
     }
-    //
     const url = this.getRequestUrl(q.settings?.extendSettings);
     const init = this.getRequestInit(q.getSQL());
-    return this.request(url, init)
-      .then((r) => {
-        console.log('r: ', r);
-        return { response: r, query: q as Query, error: null, isError: false } as QueryResponse;
-      })
-      .catch((e) => {
-        return { response: null, query: q as Query, error: e, isError: true } as QueryResponse;
-      });
+    let msg = q.sql.replace(/\s/g, ' ');
+    let json: any = {
+      sql: btoa(msg + ' FORMAT JSON'),
+    };
+    try {
+      let sqlData: any = await this.newAxios(url_sql, json);
+      return { response: sqlData, query: q as Query, error: null, isError: false } as QueryResponse;
+    } catch (error) {
+      return { response: null, query: q as Query, error: '', isError: true } as QueryResponse;
+    }
   }
 
   fastCheckConnection(): any {
@@ -206,7 +247,7 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
   //
   // private async fastQuery(query: string): Promise<Response> {
   //   const url = this.getRequestUrl(null, true);
-  //   console.log('Send to ', url);
+  //
   //   const controller = new AbortController();
   //   const timeoutId = setTimeout(() => controller.abort(), 200); // 5 second timeout:
   //   return fetch(`${url}?query=${query}`, { method: 'GET', signal: controller.signal });
@@ -267,16 +308,13 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
       this.connection.username,
       this.connection.password
     );
-    console.log('this.query(sql): ', this.query(sql));
 
     return await this.query(sql);
   }
 
   async getTableColumns(database: string, tablename: string): Promise<Array<any> | undefined> {
-    console.log('2222222222');
     const r = await this.query(this.prepared().columnsList(1500, database, tablename));
     if (r.isError || !r.response.data) return undefined;
-    console.log('r.response.data: ', r.response.data);
 
     return r.response.data;
   }
@@ -289,7 +327,6 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
     if (r && r.response.data && r.response.data[0] && r.response.data[0].statement) {
       sql = r.response.data[0].statement;
     }
-    console.log('sql: ', sql);
 
     return sql;
   }

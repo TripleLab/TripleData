@@ -12,17 +12,20 @@
   /*border-bottom: 1px solid crimson;*/
 }
 
-.sider-container input  {
+.sider-container input {
   background: #1D1D1D;
 }
 
-.sider-container button  {
+.sider-container button {
   background: #1D1D1D;
 }
 
-.sider-container button:hover  {
+.sider-container button:hover {
   background: #1D1D1D !important;
   border: none;
 }
 
-.sider-container div::-webkit-scrollbar { width: 0 }
+.sider-container div::-webkit-scrollbar {
+  width: 0
+}
+

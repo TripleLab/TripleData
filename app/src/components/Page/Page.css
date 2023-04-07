@@ -1,13 +1,22 @@
 .root {
-  min-height: calc(100vh - 82px);
+  min-height: calc(100vh - 0px);
   background: #1D1D1D;
 }
 
 .main-container {
   /* padding: 1.5em 50px; */
+  flex-direction: column;
 }
 
 .ant-row-rtl #components-layout-demo-top .logo {
   float: right;
   margin: 16px 0 16px 24px;
+}
+
+.table_pagination li {
+  color: red;
+}
+
+.table_pagination {
+  color: antiquewhite;
 }

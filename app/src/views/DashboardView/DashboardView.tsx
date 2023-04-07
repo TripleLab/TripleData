@@ -255,107 +255,118 @@ class DashboardView extends React.Component<RoutedProps> {
 
     return (
       <>
-        <div
-          style={{
-            height: '70px',
-            background: '#282F3E',
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <img src={logo_tripleDB} alt="" style={{ height: '40px', marginLeft: '30px' }} />
-        </div>
-        <div
-          style={{
-            height: '12px',
-            background: '#1D1D1D',
-          }}
-        ></div>
-
         <Page column={false} uiStore={tabsStore.uiStore}>
+          <div
+            style={{
+              height: '70px',
+              background: '#282F3E',
+              display: 'flex',
+              alignItems: 'center',
+            }}
+          >
+            <img src={logo_tripleDB} alt="" style={{ height: '40px', marginLeft: '30px' }} />
+          </div>
+          <div
+            style={{
+              height: '12px',
+              background: '#1D1D1D',
+            }}
+          ></div>
           <NavPrompt when={isBlocking} message="Do you want to leave this page?" />
 
-          <Splitter
-            primary="second"
-            minSize={950}
-            maxSize={-396}
-            defaultSize="calc(100vw - 396px)"
-            size={uiStore.primaryPaneSize}
-            onDragFinished={uiStore.updatePrimaryPaneSize}
+          <div
+            style={{
+              display: 'flex',
+              flex: '1 1',
+              height: '100%',
+              overflow: 'hidden',
+              position: 'relative',
+            }}
           >
-            <Flex alignItems="flex-start" vfill className={css['sider-container']}>
-              <ServerStructureTree
-                onServerAction={this.onServerAction}
-                onTableAction={this.onTableAction}
-                onColumnAction={this.onColumnAction}
-                onCommandAction={this.onCommandAction}
-              />
-            </Flex>
-            <Flex fill={true} column hfill className={css.baseContent}>
-              <Tabs
-                activeKey={tabsStore.activeTab.map((_) => _.id).orUndefined()}
-                onEdit={this.onEditTabs}
-                onChange={tabsStore.setActiveTab}
-                onMenuAction={this.onMenuAction}
-                style={{ height: '100%' }}
-              >
-                {tabsStore.tabs.map((t) => (
-                  <TabsTabPane
-                    // style={{ background: 'red' }}
-                    key={t.id}
-                    closable
-                    tab={
-                      <Dropdown overlay={tabRightMenu(t.id)} trigger={['contextMenu']}>
-                        <span>
-                          {this.getTabIcon(t)}
-                          {t.title + '2222'}
-                        </span>
-                      </Dropdown>
-                    }
-                  >
-                    {/* minHeight: '86vh', maxHeight: '86vh', */}
-                    <Flex
-                      fill={true}
-                      column
-                      hfill
-                      style={{ background: '#282F3E', height: '100%' }}
+            <Splitter
+              primary="second"
+              minSize={950}
+              maxSize={-396}
+              defaultSize="calc(100vw - 396px)"
+              size={uiStore.primaryPaneSize}
+              onDragFinished={uiStore.updatePrimaryPaneSize}
+            >
+              <Flex alignItems="flex-start" vfill className={css['sider-container']}>
+                <ServerStructureTree
+                  onServerAction={this.onServerAction}
+                  onTableAction={this.onTableAction}
+                  onColumnAction={this.onColumnAction}
+                  onCommandAction={this.onCommandAction}
+                />
+              </Flex>
+              <Flex fill={true} column hfill className={css.baseContent}>
+                <Tabs
+                  activeKey={tabsStore.activeTab.map((_) => _.id).orUndefined()}
+                  onEdit={this.onEditTabs}
+                  onChange={tabsStore.setActiveTab}
+                  onMenuAction={this.onMenuAction}
+                  style={{ height: '100%' }}
+                >
+                  {tabsStore.tabs.map((t) => (
+                    <TabsTabPane
+                      // style={{ background: 'red' }}
+                      key={t.id}
+                      closable
+                      tab={
+                        <Dropdown overlay={tabRightMenu(t.id)} trigger={['contextMenu']}>
+                          <span>
+                            {this.getTabIcon(t)}
+                            {t.title + '2222'}
+                          </span>
+                        </Dropdown>
+                      }
                     >
-                      {isTabOfType<EditorTabModel>(t, TabType.Editor) && (
-                        <EditorTabPage
-                          store={tabsStore}
-                          serverStructure={treeStore.serverStructure.orUndefined()}
-                          model={t}
-                          onModelFieldChange={t.changeField}
-                          width={uiStore.primaryPaneSize}
-                        />
-                      )}
+                      {/* minHeight: '86vh', maxHeight: '86vh', */}
+                      <Flex
+                        fill={true}
+                        column
+                        hfill
+                        style={{ background: '#282F3E', height: '100%', position: 'relative' }}
+                      >
+                        {isTabOfType<EditorTabModel>(t, TabType.Editor) && (
+                          <EditorTabPage
+                            store={tabsStore}
+                            serverStructure={treeStore.serverStructure.orUndefined()}
+                            model={t}
+                            onModelFieldChange={t.changeField}
+                            width={uiStore.primaryPaneSize}
+                          />
+                        )}
 
-                      {isTabOfType<TableViewTabModel>(t, TabType.TableView) && (
-                        <TableViewTabPage
-                          serverStructure={treeStore.serverStructure.orUndefined()}
-                          model={t}
-                        />
-                      )}
+                        {isTabOfType<TableViewTabModel>(t, TabType.TableView) && (
+                          <TableViewTabPage
+                            serverStructure={treeStore.serverStructure.orUndefined()}
+                            model={t}
+                          />
+                        )}
 
-                      {isTabOfType<ProcessesTabModel>(t, TabType.Processes) && <ProcessesTabPage />}
+                        {isTabOfType<ProcessesTabModel>(t, TabType.Processes) && (
+                          <ProcessesTabPage />
+                        )}
 
-                      {isTabOfType<MetricsTabModel>(t, TabType.Metrics) && <MetricsTabPage />}
+                        {isTabOfType<MetricsTabModel>(t, TabType.Metrics) && <MetricsTabPage />}
 
-                      {isTabOfType<ServerOverviewTab>(t, TabType.ServerOverview) && (
-                        <ServerOverviewTabPage store={tabsStore} />
-                      )}
+                        {isTabOfType<ServerOverviewTab>(t, TabType.ServerOverview) && (
+                          <ServerOverviewTabPage store={tabsStore} />
+                        )}
 
-                      {isTabOfType<DbOverviewTab>(t, TabType.DbOverview) && <DbOverviewTabPage />}
+                        {isTabOfType<DbOverviewTab>(t, TabType.DbOverview) && <DbOverviewTabPage />}
 
-                      {isTabOfType<SqlHistoryTab>(t, TabType.SqlHistory) && (
-                        <SqlHistoryTabPage onEdit={tabsStore.openNewEditorTab} />
-                      )}
-                    </Flex>
-                  </TabsTabPane>
-                ))}
-              </Tabs>
-            </Flex>
-          </Splitter>
+                        {isTabOfType<SqlHistoryTab>(t, TabType.SqlHistory) && (
+                          <SqlHistoryTabPage onEdit={tabsStore.openNewEditorTab} />
+                        )}
+                      </Flex>
+                    </TabsTabPane>
+                  ))}
+                </Tabs>
+              </Flex>
+            </Splitter>
+          </div>
         </Page>
       </>
     );
