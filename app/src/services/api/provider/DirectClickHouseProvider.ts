@@ -221,7 +221,10 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
   }
 
   public async query(q: Query | string, resultAsKey = false): Promise<QueryResponse> {
-    const url_sql = 'http://3.22.217.3:30020/triple-account/data-analysis/querySystem';
+    const url_sql = 'http://3.22.217.3:30020/triple-account/data-analysis/query';
+    let id: any =
+      localStorage.getItem('workSpace') && JSON.parse(localStorage.getItem('workSpace') || '');
+
     if (typeof q === 'string') {
       q = new Query(q);
       q.setJsonFormat();
@@ -231,6 +234,8 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
     let msg = q.sql.replace(/\s/g, ' ');
     let json: any = {
       sql: btoa(msg + ' FORMAT JSON'),
+      database: 'default',
+      groupId: id.groupId,
     };
     try {
       let sqlData: any = await this.newAxios(url_sql, json);

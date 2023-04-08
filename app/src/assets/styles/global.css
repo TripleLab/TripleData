@@ -112,11 +112,11 @@ body {
 }
 
 :global(.semi-table-body::-webkit-scrollbar-track) {
-  border-radius: 8px;
+  /* border-radius: 8px; */
   background: #4B515D;
 }
 
 :global(.semi-table-body::-webkit-scrollbar-corner) {
-  border-radius: 0px 8px 0px 0px;
+  /* border-radius: 0px 0px 8px 0px; */
   background: #4B515D;
 }
