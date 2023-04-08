@@ -48,7 +48,7 @@ export default class Api {
 
     console.log(`Connection - OK, version: ${version}`);
     console.log('CheckDatabaseStructure....');
-    // await api.provider.checkDatabaseStructure();
+    await api.provider.checkDatabaseStructure();
     console.log('Structure - OK, go work');
     return api;
   }
