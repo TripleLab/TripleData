@@ -102,8 +102,8 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
   newAxios = async (url: any, json: any) => {
     let key: any =
       localStorage.getItem('login-with-metamask:auth') &&
-      JSON.parse(localStorage.getItem('login-with-metamask:auth').token || '');
-    let token = 'Bearer ' + key;
+      JSON.parse(localStorage.getItem('login-with-metamask:auth') || '');
+    let token = 'Bearer ' + key.token;
     console.log('token: ', token);
     let callback;
     await axios({
