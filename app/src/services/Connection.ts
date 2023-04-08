@@ -36,5 +36,6 @@ export function isDirectConnection(connection: ConnectionInit): connection is Di
 
 // Just to avoid warnings when reexporting types when compile with webpack and tsc module option is 'esnext'.
 const Connection = {};
+console.log('Connection: ', Connection);
 
 export default Connection;
