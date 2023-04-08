@@ -34,15 +34,17 @@ class App extends React.Component<RoutedProps> {
   protected loadingReaction?: IReactionDisposer;
 
   componentDidMount() {
-    // console.log('App->componentDidMount');
+    console.log('App->componentDidMount');
     const { store, connection } = this.props;
+    console.log('connection: ', connection);
+    console.log('store: ', store);
 
     this.loadingReaction = reaction(
       () => store.uiStore.loading,
       (loading) => App.toggleAppLoader(loading)
     );
 
-    connection && !store.isLoggedIn && store.initApi(connection);
+    connection && store.initApi(connection);
   }
 
   componentWillUnmount() {
