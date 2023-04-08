@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { observer } from 'mobx-react';
 import { Option } from 'funfix-core';
 import { FieldChangeHandler } from 'module/mobx-utils';
@@ -35,10 +35,14 @@ interface Props {
   width?: number;
 }
 
+let h = document.documentElement.clientHeight;
+let he = h - 600;
+
 @observer
 export default class EditorTabPage extends React.Component<Props> {
   state = {
     enterFullScreen: false,
+    height: he,
   };
   stats?: Statistics;
 
@@ -219,6 +223,19 @@ export default class EditorTabPage extends React.Component<Props> {
         };
       });
     }
+    let h;
+    const watchWindowSize = () => {
+      let h2 = document.documentElement.clientHeight;
+      let he2 = h2 - 600;
+      if (he2 !== this.state.height) {
+        this.setState({
+          height: he2,
+        });
+      }
+    };
+    window.addEventListener('resize', watchWindowSize);
+
+    
     return (
       <React.Fragment>
         <Splitter split="horizontal" minSize={100} defaultSize={300}>
@@ -253,7 +270,7 @@ export default class EditorTabPage extends React.Component<Props> {
               )}
             </div>
             <Spin tip="Loading..." spinning={!!store.uiStore.executingQueries.length}>
-              {resultList.length > 0 && (
+              {resultList.length > 0 && dataList.length > 0 && (
                 // <DataItemsLayout
                 //   onResize={this.onResizeGrid}
                 //   cols={4}
@@ -267,9 +284,10 @@ export default class EditorTabPage extends React.Component<Props> {
                 <Table
                   columns={columns}
                   dataSource={dataList}
+                  // resizable={true}
                   // rowSelection={rowSelection}
                   // onRow={handleRow}
-                  scroll={{ y: 300, x: 1200 }}
+                  scroll={{ y: this.state.height, x: 1200 }}
                   pagination={{
                     pageSize: 50,
                     formatPageText: false,
