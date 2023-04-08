@@ -25,6 +25,7 @@ import { Table, Pagination } from '@douyinfe/semi-ui';
 import './EditorTabPage.css';
 import RequestStats from '../EditorTabPage/RequestStats';
 import { Statistics } from 'services/api/DataDecorator';
+import { Spin } from 'antd';
 
 interface Props {
   store: TabsStore;
@@ -251,42 +252,39 @@ export default class EditorTabPage extends React.Component<Props> {
                 />
               )}
             </div>
-            {/* {!!store.uiStore.executingQueries.length && ( */}
-            {/* <Progress queries={store.uiStore.executingQueries} /> */}
-            {/* )} */}
-            {/* <>3333333</> */}
-            {resultList.length > 0 && (
-              // <DataItemsLayout
-              //   onResize={this.onResizeGrid}
-              //   cols={4}
-              //   itemWidth={4}
-              //   itemHeight={10}
-              //   items={resultList}
-              //   width={width}
-              //   renderItem={this.renderTable}
-              //   locked={model.pinnedResult}
-              // />
-              <Table
-                columns={columns}
-                dataSource={dataList}
-                // rowSelection={rowSelection}
-                // onRow={handleRow}
-                scroll={{ y: 300, x: 1200 }}
-                pagination={{
-                  pageSize: 50,
-                  formatPageText: false,
-                  showSizeChanger: true,
-                  showTotal: true,
-                  // showQuickJumper:true,
-                  className: 'table_pagination',
-                  pageSizeOpts: [50, 100, 200],
-                  // style: {  color: '#ffffff' },
-                }}
-              />
+            <Spin tip="Loading..." spinning={!!store.uiStore.executingQueries.length}>
+              {resultList.length > 0 && (
+                // <DataItemsLayout
+                //   onResize={this.onResizeGrid}
+                //   cols={4}
+                //   itemWidth={4}
+                //   itemHeight={10}
+                //   items={resultList}
+                //   width={width}
+                //   renderItem={this.renderTable}
+                //   locked={model.pinnedResult}
+                // />
+                <Table
+                  columns={columns}
+                  dataSource={dataList}
+                  // rowSelection={rowSelection}
+                  // onRow={handleRow}
+                  scroll={{ y: 300, x: 1200 }}
+                  pagination={{
+                    pageSize: 50,
+                    formatPageText: false,
+                    showSizeChanger: true,
+                    showTotal: true,
+                    // showQuickJumper:true,
+                    className: 'table_pagination',
+                    pageSizeOpts: [50, 100, 200],
+                    // style: {  color: '#ffffff' },
+                  }}
+                />
 
-              // <Table columns={columns} dataSource={dataList} scroll={{ x: 1500, y: 300 }} />
-            )}
-
+                // <Table columns={columns} dataSource={dataList} scroll={{ x: 1500, y: 300 }} />
+              )}
+            </Spin>
             {/* <div style={{ bottom: '0', position: 'absolute' }}>
                 {' '}
                 {resultList.length > 0 && (
