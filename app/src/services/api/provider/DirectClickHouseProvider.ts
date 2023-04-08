@@ -183,7 +183,7 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
 
     const url = 'http://3.22.217.3:30020/triple-account/data-analysis/querySystem';
     let json_columns: any = {
-      sql: btoa('SELECT * FROM system.columns LIMIT 101 FORMAT JSON'),
+      sql: btoa('SELECT * FROM system.columns LIMIT 55550 FORMAT JSON'),
     };
     let json_functions: any = {
       sql: btoa('SELECT name, is_aggregate from system.functions FORMAT JSON'),
