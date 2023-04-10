@@ -181,7 +181,7 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
       '     FORMAT JSON';
     let encodedStr = btoa(str);
 
-    const url = 'http://3.22.217.3:30020/triple-account/data-analysis/querySystem';
+    const url = 'https://triplelab.xyz/triple-account/data-analysis/querySystem';
     let json_columns: any = {
       sql: btoa('SELECT * FROM system.columns LIMIT 55550 FORMAT JSON'),
     };
@@ -221,7 +221,7 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
   }
 
   public async query(q: Query | string, resultAsKey = false): Promise<QueryResponse> {
-    const url_sql = 'http://3.22.217.3:30020/triple-account/data-analysis/query';
+    const url_sql = 'https://triplelab.xyz/triple-account/data-analysis/query';
     let id: any =
       localStorage.getItem('workSpace') && JSON.parse(localStorage.getItem('workSpace') || '');
 
