@@ -43,6 +43,8 @@ export default class EditorTabPage extends React.Component<Props> {
   state = {
     enterFullScreen: false,
     height: he,
+    pageSize: 50,
+    page: 1,
   };
   stats?: Statistics;
 
@@ -204,10 +206,8 @@ export default class EditorTabPage extends React.Component<Props> {
       bytesRead: 0,
     };
     let dataList = [];
-    let columns = [];
+    let columns: any[] = [];
     if (t) {
-      console.log('t: ', JSON.parse(t).meta.columns);
-      console.log('t: ', JSON.parse(t).rows);
       dataList = JSON.parse(t).rows;
       stats = JSON.parse(t).stats;
       columns = JSON.parse(t).meta.columns.map((e: { name: any }) => {
@@ -235,7 +235,16 @@ export default class EditorTabPage extends React.Component<Props> {
     };
     window.addEventListener('resize', watchWindowSize);
 
-    
+    const paginationFun = (list: []) => {
+      let page = this.state.page;
+      let pageSize = this.state.pageSize;
+      let spList = [];
+      for (let i = 0; i < list.length; i += pageSize) {
+        spList.push(list.slice(i, i + pageSize));
+      }
+      return spList[page - 1];
+    };
+
     return (
       <React.Fragment>
         <Splitter split="horizontal" minSize={100} defaultSize={300}>
@@ -257,6 +266,8 @@ export default class EditorTabPage extends React.Component<Props> {
               padding: '10px 20px',
               display: 'flex',
               flexDirection: 'column',
+              height: '100%',
+              overflow: 'hidden'
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '28px' }}>
@@ -269,7 +280,12 @@ export default class EditorTabPage extends React.Component<Props> {
                 />
               )}
             </div>
-            <Spin tip="Loading..." spinning={!!store.uiStore.executingQueries.length}>
+            <Spin tip="Loading..." spinning={!!store.uiStore.executingQueries.length} style={{
+              display: 'flex',
+              flex: '1 1',
+              flexDirection: 'column',
+              overflow: 'hidden'
+            }}>
               {resultList.length > 0 && dataList.length > 0 && (
                 // <DataItemsLayout
                 //   onResize={this.onResizeGrid}
@@ -281,26 +297,61 @@ export default class EditorTabPage extends React.Component<Props> {
                 //   renderItem={this.renderTable}
                 //   locked={model.pinnedResult}
                 // />
-                <Table
-                  columns={columns}
-                  dataSource={dataList}
-                  // resizable={true}
-                  // rowSelection={rowSelection}
-                  // onRow={handleRow}
-                  scroll={{ y: this.state.height, x: 1200 }}
-                  pagination={{
-                    pageSize: 50,
-                    formatPageText: false,
-                    showSizeChanger: true,
-                    showTotal: true,
-                    // showQuickJumper:true,
-                    className: 'table_pagination',
-                    pageSizeOpts: [50, 100, 200],
-                    // style: {  color: '#ffffff' },
+                //class="result-wrapper"
+                //class="result-table"
+                <div
+                  style={{
+                    display: 'flex',
+                    flex: '1 1',
+                    flexDirection: 'column',
+                    overflow: 'hidden',
                   }}
-                />
-
-                // <Table columns={columns} dataSource={dataList} scroll={{ x: 1500, y: 300 }} />
+                >
+                  {/* height: this.state.height, */}
+                  <div
+                    style={{  overflowY: 'scroll',marginBottom: '8px' }}
+                    className="table_box"
+                  >
+                    <table
+                      style={{
+                        borderCollapse: 'collapse',
+                        position: 'relative',
+                      }}
+                      className="table_pagination"
+                    >
+                      <thead style={{ top: '0', position: 'sticky' }}>
+                        <tr>
+                          {columns.map((e: any, key: any) => {
+                            return <th key={key}>{e.title}</th>;
+                          })}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {paginationFun(dataList).map((k: any, key: any) => (
+                          <tr>
+                            {columns.map((v: any, key: any) => (
+                              <td>{k[v.dataIndex]}</td>
+                            ))}
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <Pagination
+                    total={dataList.length}
+                    showSizeChanger
+                    pageSizeOpts={[50, 100, 200]}
+                    showTotal
+                    className="table_pagination"
+                    pageSize={50}
+                    onChange={(currentPage, pageSize) => {
+                      this.setState({
+                        pageSize: pageSize,
+                        page: currentPage,
+                      });
+                    }}
+                  ></Pagination>
+                </div>
               )}
             </Spin>
             {/* <div style={{ bottom: '0', position: 'absolute' }}>
