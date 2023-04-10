@@ -20,23 +20,23 @@ export default class Api {
     // -----
     // connection.readonly = true; // check
     console.log('Try connect to clickhouse');
-    let version = '';
-    try {
-      version = '22.1.3.7';
-      console.log('Version CH', version);
-      //throw new Error('Cants');
-    } catch (e: any) {
-      let typeError = '';
-      console.log(e.name);
-      if (e.name == 'AbortError') {
-        typeError = 'AbortError';
-      }
-      throw {
-        title: 'Error connection to ClickHouse.',
-        description: connectGetErrorMessage(connection, typeError),
-        error: new Error('Error on connection'),
-      } as DescriptionError;
-    }
+    let version = '22.1.3.7';
+    // try {
+    //   version = '22.1.3.7';
+    //   console.log('Version CH', version);
+    //   //throw new Error('Cants');
+    // } catch (e: any) {
+    //   let typeError = '';
+    //   console.log(e.name);
+    //   if (e.name == 'AbortError') {
+    //     typeError = 'AbortError';
+    //   }
+    //   throw {
+    //     title: 'Error connection to ClickHouse.',
+    //     description: connectGetErrorMessage(connection, typeError),
+    //     error: new Error('Error on connection'),
+    //   } as DescriptionError;
+    // }
     if (!version) {
       throw {
         title: 'Can`t fetch version server',
