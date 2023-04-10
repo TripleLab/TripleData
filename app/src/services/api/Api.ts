@@ -22,10 +22,10 @@ export default class Api {
     console.log('Try connect to clickhouse');
     let version = '';
     try {
-      version = await provider.fastGetVersion();
+      version = '22.1.3.7';
       console.log('Version CH', version);
       //throw new Error('Cants');
-    } catch (e) {
+    } catch (e: any) {
       let typeError = '';
       console.log(e.name);
       if (e.name == 'AbortError') {
