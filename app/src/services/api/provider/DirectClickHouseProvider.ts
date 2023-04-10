@@ -205,7 +205,7 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
         return ServerStructure.from(
           tablesData.data,
           databasesData.data,
-          ConnectionName,
+          'Triplelab',
           columnsData.data,
           undefined,
           functionsData.data,
