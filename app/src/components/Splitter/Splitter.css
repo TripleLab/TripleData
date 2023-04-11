@@ -27,6 +27,7 @@
         height: 10px;
         cursor: row-resize;
         background: #242529;
+        position: relative;
         
         &::before {
           content: '';

@@ -65,9 +65,9 @@ export default class Toolbar extends React.Component<ToolbarProps & FlexProps> {
     return (
       <Flex alignItems="center" justifyContent="flex-end" style={{ background: 'rgb(30,30,30)' }}>
         <div className={css['button']} onClick={onActionRunRunCurrent}>
-          Run Current
+          Run ⌘ + ⏎
         </div>
-
+        <div style={{ height: '9px' }}></div>
         {/* <Flex grow justifyContent="flex-end">
           {stats && (
             <>

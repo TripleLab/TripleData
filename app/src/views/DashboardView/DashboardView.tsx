@@ -8,7 +8,7 @@ import { routePaths } from 'routes';
 import { Modal, Dropdown, Menu } from 'antd';
 import { MenuInfo } from 'rc-menu/lib/interface';
 import { Stores, TabsStore, TreeStore } from 'stores';
-import logo from '../../assets/images/logo_tripleDB.png'
+import logo from '../../assets/images/logo_triple.png';
 import {
   DbOverviewTab,
   EditorTabModel,
@@ -263,7 +263,14 @@ class DashboardView extends React.Component<RoutedProps> {
               alignItems: 'center',
             }}
           >
-            <img src={logo} alt="" style={{ height: '40px', marginLeft: '30px' }} />
+            <img
+              src={logo}
+              alt=""
+              style={{ height: '40px', marginLeft: '30px', cursor: 'pointer' }}
+              onClick={() => {
+                window.open('https://triplelab.xyz/platform/console/overview');
+              }}
+            />
           </div>
           <div
             style={{
