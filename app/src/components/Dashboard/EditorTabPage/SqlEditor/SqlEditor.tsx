@@ -8,6 +8,7 @@ import { TextInsertType } from './types';
 import Toolbar, { ActionType, ToolbarProps } from './Toolbar';
 import css from './SqlEditor.css';
 import SimpleEditor, { SimpleEditorProps } from './SimpleEditor';
+
 // ------------------------------------------------------------------------------------
 export interface SqlEditorProps
   extends Omit<ToolbarProps, 'databases'>,
@@ -91,6 +92,7 @@ export default class SqlEditor extends React.Component<SqlEditorProps> {
       content,
       stats,
       onAction,
+      formatCode,
       className,
       ...rest
     } = this.props;
@@ -117,6 +119,7 @@ export default class SqlEditor extends React.Component<SqlEditorProps> {
           onDatabaseChange={onDatabaseChange}
           onAction={this.onAction}
           stats={stats}
+          formatCode={formatCode}
         />
       </Flex>
     );

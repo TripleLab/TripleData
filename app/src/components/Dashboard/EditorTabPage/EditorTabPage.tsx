@@ -26,6 +26,7 @@ import './EditorTabPage.css';
 import RequestStats from '../EditorTabPage/RequestStats';
 import { Statistics } from 'services/api/DataDecorator';
 import { Spin } from 'antd';
+import { format } from 'sql-formatter';
 
 interface Props {
   store: TabsStore;
@@ -39,15 +40,19 @@ let h = document.documentElement.clientHeight;
 let he = h - 600;
 
 @observer
-export default class EditorTabPage extends React.Component<Props> {
-  state = {
-    enterFullScreen: false,
-    height: he,
-    pageSize: 50,
-    page: 1,
-  };
+export default class EditorTabPage extends React.Component<any, any> {
+  constructor(props: Props | Readonly<Props>) {
+    super(props);
+    const { model } = this.props;
+    this.state = {
+      enterFullScreen: false,
+      height: he,
+      pageSize: 50,
+      page: 1,
+      code: model.content,
+    };
+  }
   stats?: Statistics;
-
   private onContentChange = (content: string) => {
     this.props.onModelFieldChange({ name: 'content', value: content });
   };
@@ -182,21 +187,25 @@ export default class EditorTabPage extends React.Component<Props> {
 
   render() {
     const { store, serverStructure, model, width } = this.props;
-    const resultList = model.queriesResult.map((r) => r.list).getOrElse([]);
-    console.log('resultList: ', resultList);
-
-    const handleRow = (record: any, index: any) => {
-      // 给偶数行设置斑马纹
-      if (index % 2 === 0) {
-        return {
-          style: {
-            background: '#16161a',
-          },
-        };
-      } else {
-        return {};
-      }
+    const resultList = model.queriesResult.map((r: { list: any }) => r.list).getOrElse([]);
+    
+    const formatCode = () => {
+      this.setState({
+        code: format(model.content, { language: 'mysql' }),
+      });
     };
+    // const handleRow = (record: any, index: any) => {
+    //   // 给偶数行设置斑马纹
+    //   if (index % 2 === 0) {
+    //     return {
+    //       style: {
+    //         background: '#16161a',
+    //       },
+    //     };
+    //   } else {
+    //     return {};
+    //   }
+    // };
 
     let data = resultList[0]?.result.value;
     let t = JSON.stringify(data);
@@ -249,14 +258,15 @@ export default class EditorTabPage extends React.Component<Props> {
       <React.Fragment>
         <Splitter split="horizontal" minSize={100} defaultSize={300}>
           <SqlEditor
-            content={model.content}
+            content={this.state.code}
             onContentChange={this.onContentChange}
             serverStructure={serverStructure}
             currentDatabase={model.currentDatabase.getOrElse('')}
             onDatabaseChange={this.onDatabaseChange}
             onAction={this.onEditorAction}
-            stats={model.queriesResult.map((_) => _.totalStats).orUndefined()}
+            stats={model.queriesResult.map((_: { totalStats: any }) => _.totalStats).orUndefined()}
             ref={this.setEditorRef}
+            formatCode={formatCode}
             fill
           />
 
@@ -267,7 +277,7 @@ export default class EditorTabPage extends React.Component<Props> {
               display: 'flex',
               flexDirection: 'column',
               height: '100%',
-              overflow: 'hidden'
+              overflow: 'hidden',
             }}
           >
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '28px' }}>
@@ -280,12 +290,16 @@ export default class EditorTabPage extends React.Component<Props> {
                 />
               )}
             </div>
-            <Spin tip="Loading..." spinning={!!store.uiStore.executingQueries.length} style={{
-              display: 'flex',
-              flex: '1 1',
-              flexDirection: 'column',
-              overflow: 'hidden'
-            }}>
+            <Spin
+              tip="Loading..."
+              spinning={!!store.uiStore.executingQueries.length}
+              style={{
+                display: 'flex',
+                flex: '1 1',
+                flexDirection: 'column',
+                overflow: 'hidden',
+              }}
+            >
               {resultList.length > 0 && dataList.length > 0 && (
                 // <DataItemsLayout
                 //   onResize={this.onResizeGrid}
@@ -308,10 +322,7 @@ export default class EditorTabPage extends React.Component<Props> {
                   }}
                 >
                   {/* height: this.state.height, */}
-                  <div
-                    style={{  overflowY: 'scroll',marginBottom: '8px' }}
-                    className="table_box"
-                  >
+                  <div style={{ overflowY: 'scroll', marginBottom: '8px' }} className="table_box">
                     <table
                       style={{
                         borderCollapse: 'collapse',

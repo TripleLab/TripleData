@@ -9,6 +9,7 @@ import ActionButton, { Props as ActionButtonProps } from './ActionButton';
 import RequestStats from '../../RequestStats';
 import css from './Toolbar.css';
 import { CaretRightOutlined, ForwardOutlined, SaveOutlined } from '@ant-design/icons';
+import format_logo from '../../../../../assets/images/format.svg';
 
 export enum ActionType {
   Save = 1,
@@ -22,6 +23,7 @@ export interface ToolbarProps extends Pick<ActionButtonProps<ActionType>, 'onAct
   currentDatabase: string;
   onDatabaseChange?: (db: ServerStructure.Database) => void;
   stats?: Statistics;
+  formatCode?: any;
 }
 
 function SpaceH() {
@@ -39,7 +41,8 @@ export default class Toolbar extends React.Component<ToolbarProps & FlexProps> {
   };
 
   render() {
-    const { databases, currentDatabase, onDatabaseChange, onAction, stats, ...rest } = this.props;
+    const { databases, currentDatabase, onDatabaseChange, onAction, stats, formatCode, ...rest } =
+      this.props;
 
     const onActionMenuClick = (click: MenuInfo) => {
       onAction(parseInt(click.key, 0), click.domEvent);
@@ -64,6 +67,14 @@ export default class Toolbar extends React.Component<ToolbarProps & FlexProps> {
 
     return (
       <Flex alignItems="center" justifyContent="flex-end" style={{ background: 'rgb(30,30,30)' }}>
+        <div
+          className={css['button']}
+          onClick={formatCode}
+          style={{ display: 'flex', alignItems: 'center' }}
+        >
+          <img src={format_logo} alt="" style={{ marginRight: '10px' }} />
+          Format
+        </div>
         <div className={css['button']} onClick={onActionRunRunCurrent}>
           Run ⌘ + ⏎
         </div>

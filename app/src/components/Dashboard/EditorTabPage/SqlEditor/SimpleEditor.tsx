@@ -24,6 +24,7 @@ export interface SimpleEditorProps {
   processSql?: boolean;
   onMount?: () => void;
   onExecCommand?: (queryList: Array<Query>, isExecAll: boolean) => void;
+  formatCode?:any
 }
 
 // ------------------------------------------------------------------------------------
