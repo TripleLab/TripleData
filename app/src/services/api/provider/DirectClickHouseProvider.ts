@@ -4,7 +4,7 @@ import CoreProvider, { QueryResponse, RequestPool } from './CoreProvider';
 import { Query } from '../Query';
 const axios = require('axios');
 
-let head = 'http://18.116.237.30:8123';
+let head = 'http://3.22.217.3:30020';
 // let head = 'https://triplelab.xyz/v1'
 
 export default class DirectClickHouseProvider extends CoreProvider<DirectConnection> {
