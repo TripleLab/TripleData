@@ -185,7 +185,7 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
       '     FORMAT JSON';
     let encodedStr = btoa(str);
 
-    const url = `${head}/v1/triple-account/data-analysis/querySystem`;
+    const url = `${head}/triple-account/data-analysis/querySystem`;
     let json_columns: any = {
       sql: btoa('SELECT * FROM system.columns LIMIT 55550 FORMAT JSON'),
     };
