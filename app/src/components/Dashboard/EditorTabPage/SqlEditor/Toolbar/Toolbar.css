@@ -4,7 +4,7 @@
 }
 
 .button {
-  width: 168px;
+  width: 138px;
   height: 42px;
   border-radius: 4px 4px 4px 4px;
   opacity: 1;
@@ -16,6 +16,6 @@
   color: #ffffff;
   cursor: pointer;
   background-color: #34373C;
-  margin-right: 36px;
+  margin-right: 23px;
   margin-bottom: 9px;
 }

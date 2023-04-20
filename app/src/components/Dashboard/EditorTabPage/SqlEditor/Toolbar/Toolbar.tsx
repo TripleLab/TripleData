@@ -24,6 +24,7 @@ export interface ToolbarProps extends Pick<ActionButtonProps<ActionType>, 'onAct
   onDatabaseChange?: (db: ServerStructure.Database) => void;
   stats?: Statistics;
   formatCode?: any;
+  saveCallback?: any;
 }
 
 function SpaceH() {
@@ -41,8 +42,16 @@ export default class Toolbar extends React.Component<ToolbarProps & FlexProps> {
   };
 
   render() {
-    const { databases, currentDatabase, onDatabaseChange, onAction, stats, formatCode, ...rest } =
-      this.props;
+    const {
+      databases,
+      currentDatabase,
+      onDatabaseChange,
+      onAction,
+      stats,
+      formatCode,
+      saveCallback,
+      ...rest
+    } = this.props;
 
     const onActionMenuClick = (click: MenuInfo) => {
       onAction(parseInt(click.key, 0), click.domEvent);
@@ -75,8 +84,18 @@ export default class Toolbar extends React.Component<ToolbarProps & FlexProps> {
           <img src={format_logo} alt="" style={{ marginRight: '10px' }} />
           Format
         </div>
+
+        <div
+          className={css['button']}
+          onClick={saveCallback}
+          style={{ display: 'flex', alignItems: 'center' }}
+        >
+          <img src={format_logo} alt="" style={{ marginRight: '10px' }} />
+          Save
+        </div>
+
         <div className={css['button']} onClick={onActionRunRunCurrent}>
-          Run ⌘ + ⏎
+          ⌘ + ⏎ Run
         </div>
         <div style={{ height: '9px' }}></div>
         {/* <Flex grow justifyContent="flex-end">

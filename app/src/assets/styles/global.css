@@ -144,3 +144,32 @@ body {
   flex-direction: column;
   overflow: hidden;
 }
+
+:global(.ant-modal-header) {
+  border-radius: 19px 19px 0px 0px;
+  background: #ffffff;
+  border-bottom: none
+}
+
+:global(.ant-modal-title) {
+  font-size: 24px;
+  font-family: Arial-Bold, Arial;
+  font-weight: bold;
+  color: #291F4E;
+  line-height: 0px;
+}
+
+:global(#input_save) {
+  border-radius: 8px 8px 8px 8px;
+  height: 42px;
+  background-color: #ffffff;
+  border: 1px solid #E6E6E6;
+  color: #707070;
+  width: 100%;
+  padding-left: 23px;
+  font-family: Arial-Regular, Arial;
+}
+
+:global(#input_save:focus) {
+  box-shadow: none
+}

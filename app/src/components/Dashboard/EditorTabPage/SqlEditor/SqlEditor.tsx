@@ -83,6 +83,14 @@ export default class SqlEditor extends React.Component<SqlEditorProps> {
     this.ref = editor;
   };
 
+  private selectedCode = () => {
+    const { saveCallback } = this.props;
+    let data = this.ref?.getCode();
+    if(data?.length){
+      saveCallback(data[0].sql);
+    }
+  };
+
   render() {
     const {
       serverStructure,
@@ -93,6 +101,7 @@ export default class SqlEditor extends React.Component<SqlEditorProps> {
       stats,
       onAction,
       formatCode,
+      saveCallback,
       className,
       ...rest
     } = this.props;
@@ -109,6 +118,7 @@ export default class SqlEditor extends React.Component<SqlEditorProps> {
             serverStructure={serverStructure}
             onMount={this.onEditorMount}
             onExecCommand={this.execQueries}
+            // getCode={this.selectedCode}
           />
         </Flex>
 
@@ -120,6 +130,7 @@ export default class SqlEditor extends React.Component<SqlEditorProps> {
           onAction={this.onAction}
           stats={stats}
           formatCode={formatCode}
+          saveCallback={this.selectedCode}
         />
       </Flex>
     );

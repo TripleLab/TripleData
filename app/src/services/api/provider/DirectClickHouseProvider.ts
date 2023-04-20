@@ -2,7 +2,9 @@ import { ConnectionType, DirectConnection } from '../../Connection';
 import ServerStructure from '../ServerStructure';
 import CoreProvider, { QueryResponse, RequestPool } from './CoreProvider';
 import { Query } from '../Query';
-const axios = require('axios');
+// const axios = require('axios');
+
+import { newAxios } from '../../../components/axios';
 
 let head = 'http://3.22.217.3:30020';
 // let head = 'https://triplelab.xyz/v1'
@@ -103,31 +105,30 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
     return this.getDatabaseStructure(1);
   }
 
-  newAxios = async (url: any, json: any) => {
-    let key: any =
-      localStorage.getItem('login-with-metamask:auth') &&
-      JSON.parse(localStorage.getItem('login-with-metamask:auth') || '');
-    let token = 'Bearer ' + key.token;
-    console.log('token: ', token);
-    let callback;
-    await axios({
-      url: url,
-      method: 'post',
-      timeout: 60000,
-      headers: {
-        Authorization: token,
-      },
-      data: json,
-    }).then(function (response: any) {
-      console.log('res11111111111111111111111111ponse: ', response);
-      callback = response.data;
-    });
-    return callback;
-  };
+  // newAxios = async (url: any, json: any) => {
+  //   let key: any =
+  //     localStorage.getItem('login-with-metamask:auth') &&
+  //     JSON.parse(localStorage.getItem('login-with-metamask:auth') || '');
+  //   let token = 'Bearer ' + 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4YTc0ODJkMjg3MmNhMTVlMDE4NzM1YjhhYjBhMDAwMyIsImlubmVyLXRva2VuIjpmYWxzZSwiY3JlYXRlZCI6MTY4MTg4Njc3Mzc0MiwiZXhwIjoxNjg3ODg2NzczfQ.F5z2AB6EMlvXq0NT0FKdAPk8OH_LfZYTtkEJHyCNAr-Tky0JPASelsWYUfvjJN3aOAfIFH95-g5yCN1-0zNERQ';
+  //   console.log('token: ', token);
+  //   let callback;
+  //   await axios({
+  //     url: url,
+  //     method: 'post',
+  //     timeout: 60000,
+  //     headers: {
+  //       Authorization: token,
+  //     },
+  //     data: json,
+  //   }).then(function (response: any) {
+  //     console.log('res11111111111111111111111111ponse: ', response);
+  //     callback = response.data;
+  //   });
+  //   return callback;
+  // };
 
   async getDatabaseStructure(_LimitRead = 5000): Promise<ServerStructure.Server> {
     // const _LimitRead = 5000;
-    console.log('11111111111111111111111111111');
     // Create pool of SQL-Query
     const pool: RequestPool = {
       // tables: this.prepared().databaseTablesList(_LimitRead * 2),
@@ -198,10 +199,10 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
     let json_tables: any = {
       sql: encodedStr,
     };
-    let columnsData: any = await this.newAxios(url, json_columns);
-    let functionsData: any = await this.newAxios(url, json_functions);
-    let databasesData: any = await this.newAxios(url, json_databases);
-    let tablesData: any = await this.newAxios(url, json_tables);
+    let columnsData: any = await newAxios(url, json_columns);
+    let functionsData: any = await newAxios(url, json_functions);
+    let databasesData: any = await newAxios(url, json_databases);
+    let tablesData: any = await newAxios(url, json_tables);
 
     if (columnsData && functionsData && databasesData && tablesData) {
       // Create ServerStructure.Server
@@ -240,9 +241,10 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
       sql: btoa(msg + ' FORMAT JSON'),
       database: 'default',
       groupId: id.groupId,
+      // groupId: '02668136-21e8-43ff-a410-55b83ae955d2',
     };
     try {
-      let sqlData: any = await this.newAxios(url_sql, json);
+      let sqlData: any = await newAxios(url_sql, json);
       return { response: sqlData, query: q as Query, error: null, isError: false } as QueryResponse;
     } catch (error) {
       return { response: null, query: q as Query, error: '', isError: true } as QueryResponse;

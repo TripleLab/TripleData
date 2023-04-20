@@ -24,7 +24,10 @@ export interface SimpleEditorProps {
   processSql?: boolean;
   onMount?: () => void;
   onExecCommand?: (queryList: Array<Query>, isExecAll: boolean) => void;
-  formatCode?:any
+  formatCode?: any;
+  saveCallback?: any;
+  selectedCode?: any;
+  getCode?: any;
 }
 
 // ------------------------------------------------------------------------------------
@@ -50,6 +53,17 @@ export default class SimpleEditor extends React.Component<SimpleEditorProps> {
     this.setEditorRef(undefined);
     // WARN!:!No disposeAll HERE!
   }
+
+  // componentDidUpdate(): void {
+  //   console.log('nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn');
+  // }
+
+  // shouldComponentUpdate(nextProps: any, nextState: any) {
+  //   console.log('this.props: ', this.props);
+  //   console.log('nextProps: ', nextProps);
+  //   console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx')
+  //   return true;
+  // }
 
   UNSAFE_componentWillReceiveProps({ serverStructure }: SimpleEditorProps) {
     // Todo_drop use UNSAFE
@@ -142,7 +156,7 @@ export default class SimpleEditor extends React.Component<SimpleEditorProps> {
       let offset: number = -1;
       if (position) {
         const d = this.editor()?.getModel()?.getOffsetAt(position);
-        if (d !== undefined) offset=d;
+        if (d !== undefined) offset = d;
       }
       await this.helper().OnChange(modelUri, value, offset);
     } else {
@@ -169,7 +183,7 @@ export default class SimpleEditor extends React.Component<SimpleEditorProps> {
     if (value !== undefined && uriModel) {
       // Update model
       const { onContentChange } = this.props;
-      
+
       onContentChange && onContentChange(value);
       // Registration delay timer 2000мс -> parse & validate
       this.delayLanguageValueOnChange(uriModel, value);
@@ -194,6 +208,12 @@ export default class SimpleEditor extends React.Component<SimpleEditorProps> {
     } else {
       console.warn('Empty onExecCommand, after createExecCurrentQuery');
     }
+  };
+
+  public getCode = () => {
+    const execQueries =
+      this.currentEditor && this.helper()?.createExecCurrentQuery(this.currentEditor, false);
+    return execQueries;
   };
 
   /**

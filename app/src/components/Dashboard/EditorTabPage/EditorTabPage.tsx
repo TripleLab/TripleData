@@ -27,6 +27,9 @@ import RequestStats from '../EditorTabPage/RequestStats';
 import { Statistics } from 'services/api/DataDecorator';
 import { Spin } from 'antd';
 import { format } from 'sql-formatter';
+import { Button, Modal, Input } from 'antd';
+import Cancel from '../../../assets/images/Cancel.svg';
+import { newAxios } from 'components/axios';
 
 interface Props {
   store: TabsStore;
@@ -50,6 +53,12 @@ export default class EditorTabPage extends React.Component<any, any> {
       pageSize: 50,
       page: 1,
       code: model.content,
+      modalOpen: false,
+      queryName: '',
+      queryDescription: '',
+      queryName_error: '',
+      queryDescription_error: '',
+      newCode: '',
     };
   }
   stats?: Statistics;
@@ -66,8 +75,6 @@ export default class EditorTabPage extends React.Component<any, any> {
   };
 
   private onEditorAction = (action: EditorActionType, eventData?: any) => {
-    console.log('eventData: ', eventData);
-    console.log('action: ', action);
     switch (action) {
       case EditorActionType.Save: {
         const { store } = this.props;
@@ -101,22 +108,6 @@ export default class EditorTabPage extends React.Component<any, any> {
         console.log('FULLSCREEN', this.state.enterFullScreen);
         break;
       }
-      // case ResultTabActionType.Export: {
-      //   let counter = 0;
-      //   model.queriesResult.value?.list?.map((_) => {
-      //     if (
-      //       _.result.isSuccess() &&
-      //       !_.result.value.isResultText &&
-      //       !_.result.value.error &&
-      //       _.result.value.isHaveData
-      //     ) {
-      //       counter++;
-      //       const title = `ResultTable-${counter}-${model.title}`;
-      //       ExportData(_.result.value, subEvent, title);
-      //     }
-      //   });
-      //   break;
-      // }
       default:
         break;
     }
@@ -151,30 +142,6 @@ export default class EditorTabPage extends React.Component<any, any> {
     return true;
   }
 
-  //
-  // private onDataTableAction: DataTableProps['onAction'] = (action, data) => {
-  //   if (action === ResultTableActionType.Insert) {
-  //     // to insert result to editor ( where cursor )
-  //     console.log('insert result:');
-  //     console.info(`%c${data}`, 'color: #bada55');
-  //     const { model } = this.props;
-  //     model.codeEditor.forEach((editor) => editor.insertText(data, TextInsertType.Sql));
-  //   }
-  //   if (action === ResultTableActionType.Show) {
-  //     // to show result in elements
-  //     console.log('show result:');
-  //     console.info(`%c${data}`, 'color: #bada55');
-  //     const { onModelFieldChange } = this.props;
-  //     onModelFieldChange({ name: 'tableData', value: Option.of(data) });
-  //   }
-  //   if (action === ResultTableActionType.Clipboard) {
-  //     // to clipboard text
-  //     console.log('to Clipboard result:');
-  //     console.info(`%c${data}`, 'color: #bada55');
-  //     this.copyToClipboard(data);
-  //   }
-  // };
-
   private renderTable = (data: DataDecorator) => <TableSheet data={data} />;
 
   private renderDraw = (data: DataDecorator) => <Draw data={data} fill />;
@@ -188,12 +155,57 @@ export default class EditorTabPage extends React.Component<any, any> {
   render() {
     const { store, serverStructure, model, width } = this.props;
     const resultList = model.queriesResult.map((r: { list: any }) => r.list).getOrElse([]);
-    
+
     const formatCode = () => {
       this.setState({
         code: format(model.content, { language: 'mysql' }),
       });
     };
+
+    const saveCallback = (selectCode: any) => {
+      this.setState({
+        modalOpen: true,
+        newCode: selectCode ? selectCode : '',
+      });
+    };
+
+    const close = async (e: any) => {
+      if (e) {
+        if (!this.state.queryName) {
+          this.setState({
+            queryName_error: true,
+          });
+        }
+        if (!this.state.queryDescription) {
+          this.setState({
+            queryDescription_error: true,
+          });
+        }
+        if (this.state.queryName && this.state.queryDescription) {
+          let json = {
+            name: this.state.queryName,
+            des: this.state.queryDescription,
+            sql: this.state.newCode ? this.state.newCode : model.content,
+          };
+          console.log('json: ', json);
+          // let url_sql
+          // try {
+          //   let data: any = await newAxios(url_sql, json);
+          // } catch (error) {
+          //   console.log('error: ', error);
+          // }
+        }
+      } else {
+        this.setState({
+          modalOpen: false,
+          queryDescription_error: false,
+          queryName_error: false,
+          // queryName: '',
+          // queryDescription: '',
+        });
+      }
+    };
+
     // const handleRow = (record: any, index: any) => {
     //   // 给偶数行设置斑马纹
     //   if (index % 2 === 0) {
@@ -267,6 +279,7 @@ export default class EditorTabPage extends React.Component<any, any> {
             stats={model.queriesResult.map((_: { totalStats: any }) => _.totalStats).orUndefined()}
             ref={this.setEditorRef}
             formatCode={formatCode}
+            saveCallback={saveCallback}
             fill
           />
 
@@ -339,9 +352,9 @@ export default class EditorTabPage extends React.Component<any, any> {
                       </thead>
                       <tbody>
                         {paginationFun(dataList).map((k: any, key: any) => (
-                          <tr>
+                          <tr key={key}>
                             {columns.map((v: any, key: any) => (
-                              <td>{k[v.dataIndex]}</td>
+                              <td key={key}>{k[v.dataIndex]}</td>
                             ))}
                           </tr>
                         ))}
@@ -365,52 +378,138 @@ export default class EditorTabPage extends React.Component<any, any> {
                 </div>
               )}
             </Spin>
-            {/* <div style={{ bottom: '0', position: 'absolute' }}>
-                {' '}
-                {resultList.length > 0 && (
-                  // <DataItemsLayout
-                  //   onResize={this.onResizeGrid}
-                  //   cols={4}
-                  //   itemWidth={4}
-                  //   itemHeight={10}
-                  //   items={resultList}
-                  //   width={width}
-                  //   renderItem={this.renderTable}
-                  //   locked={model.pinnedResult}
-                  // />
-
-                  <Table columns={columns} dataSource={dataList} scroll={{ x: 1500, y: 300 }} />
-                )}
-              </div> */}
           </div>
-
-          {/* <div>
-              {model.tableData.map((data) => <div>{data}</div>).orUndefined()}
-
-              <Tabs
-                defaultActiveKey="table"
-                pinned={model.pinnedResult}
-                onAction={this.onResultTabAction}
-              >
-                <TabsTabPane key="table" tab="Data" style={{ overflowY: 'auto' }}>
-                  {!!store.uiStore.executingQueries.length && (
-                    <Progress queries={store.uiStore.executingQueries} />
-                  )}
-
-                  <DataItemsLayout
-                    onResize={this.onResizeGrid}
-                    cols={4}
-                    itemWidth={4}
-                    itemHeight={10}
-                    items={resultList}
-                    width={width}
-                    renderItem={this.renderTable}
-                    locked={model.pinnedResult}
-                  />
-                </TabsTabPane>
-              </Tabs>
-            </div> */}
         </Splitter>
+
+        <Modal
+          centered
+          visible={this.state.modalOpen}
+          width={600}
+          title={
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '20px 36px',
+              }}
+            >
+              <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#291F4E' }}>
+                Save SQL Queries
+              </div>
+              <img
+                src={Cancel}
+                alt=""
+                style={{ height: '20px', cursor: 'pointer' }}
+                onClick={() => close(0)}
+              />
+            </div>
+          }
+          footer={null}
+          closable={false}
+          bodyStyle={{
+            borderRadius: '0px 0px 19px 19px',
+            background: '#ffffff',
+            padding: '0px 52px 39px 52px',
+          }}
+        >
+          <div>
+            <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#291F4E' }}>Query Name</div>
+            <input
+              placeholder="Input query name"
+              id={'input_save'}
+              style={{
+                margin: '12px 0 14px 0',
+                border: this.state.queryName_error ? '1px solid red' : '1px solid #E6E6E6',
+              }}
+              value={this.state.queryName}
+              onChange={(e) => {
+                this.setState({
+                  queryName: e.target.value,
+                  queryName_error: false,
+                });
+              }}
+            />
+            <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#291F4E' }}>
+              Query Description
+            </div>
+            <input
+              placeholder="Input query description"
+              id={'input_save'}
+              style={{
+                margin: '12px 0 14px 0',
+                border: this.state.queryDescription_error ? '1px solid red' : '1px solid #E6E6E6',
+              }}
+              value={this.state.queryDescription}
+              onChange={(e) => {
+                this.setState({
+                  queryDescription: e.target.value,
+                  queryDescription_error: false,
+                });
+              }}
+            />
+            <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#291F4E' }}>
+              SQL Statement
+            </div>
+            <textarea
+              id={'input_save'}
+              disabled
+              value={this.state.newCode ? this.state.newCode : model.content}
+              style={{
+                margin: '12px 0 14px 0',
+                height: '136px',
+                background: '#F2FAF9',
+                paddingTop: '16px',
+                color: '#35A37E',
+                resize: 'none',
+              }}
+            />
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                marginTop: '30px',
+              }}
+            >
+              <div
+                style={{
+                  height: '42px',
+                  borderRadius: '8px',
+                  border: '1px solid #2F3975',
+                  color: '#2F3975',
+                  fontSize: '14px',
+                  lineHeight: '42px',
+                  textAlign: 'center',
+                  fontWeight: 400,
+                  width: '48%',
+                  cursor: 'pointer',
+                }}
+                onClick={() => close(0)}
+              >
+                Cancel
+              </div>
+
+              <div
+                style={{
+                  height: '42px',
+                  borderRadius: '8px',
+                  background: '#2F3975',
+                  color: '#ffffff',
+                  fontSize: '14px',
+                  lineHeight: '42px',
+                  textAlign: 'center',
+                  fontWeight: 400,
+                  width: '48%',
+                  cursor: 'pointer',
+                }}
+                onClick={() => close(1)}
+              >
+                Save
+              </div>
+            </div>
+          </div>
+        </Modal>
       </React.Fragment>
     );
   }

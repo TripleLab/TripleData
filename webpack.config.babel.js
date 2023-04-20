@@ -111,7 +111,7 @@ let common = {
   },
   output: {
     path: path.resolve(baseDir, 'dist'),
-    publicPath: '/data',
+    publicPath: '/',
     filename: path.join('js', `[name].js?[fullhash:5]`),
   },
   resolve: {
