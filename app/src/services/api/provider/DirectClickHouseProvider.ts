@@ -2,12 +2,7 @@ import { ConnectionType, DirectConnection } from '../../Connection';
 import ServerStructure from '../ServerStructure';
 import CoreProvider, { QueryResponse, RequestPool } from './CoreProvider';
 import { Query } from '../Query';
-// const axios = require('axios');
-
 import { newAxios } from '../../../components/axios';
-
-let head = 'http://3.22.217.3:30020';
-// let head = 'https://triplelab.xyz/v1'
 
 export default class DirectClickHouseProvider extends CoreProvider<DirectConnection> {
   private clusters: ReadonlyArray<ServerStructure.Cluster> | undefined;
@@ -186,7 +181,7 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
       '     FORMAT JSON';
     let encodedStr = btoa(str);
 
-    const url = `${head}/triple-account/data-analysis/querySystem`;
+    const url = `triple-account/data-analysis/querySystem`;
     let json_columns: any = {
       sql: btoa('SELECT * FROM system.columns LIMIT 55550 FORMAT JSON'),
     };
@@ -226,7 +221,7 @@ export default class DirectClickHouseProvider extends CoreProvider<DirectConnect
   }
 
   public async query(q: Query | string, resultAsKey = false): Promise<QueryResponse> {
-    const url_sql = `${head}/triple-account/data-analysis/query`;
+    const url_sql = `triple-account/data-analysis/query`;
     let id: any =
       localStorage.getItem('workSpace') && JSON.parse(localStorage.getItem('workSpace') || '');
 

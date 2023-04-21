@@ -30,7 +30,7 @@ import { format } from 'sql-formatter';
 import { Button, Modal, Input } from 'antd';
 import Cancel from '../../../assets/images/Cancel.svg';
 import { newAxios } from 'components/axios';
-
+import { notification } from 'antd';
 interface Props {
   store: TabsStore;
   serverStructure?: ServerStructure.Server;
@@ -184,16 +184,29 @@ export default class EditorTabPage extends React.Component<any, any> {
         if (this.state.queryName && this.state.queryDescription) {
           let json = {
             name: this.state.queryName,
-            des: this.state.queryDescription,
-            sql: this.state.newCode ? this.state.newCode : model.content,
+            description: this.state.queryDescription,
+            querySql: this.state.newCode ? btoa(this.state.newCode) : btoa(model.content),
           };
-          console.log('json: ', json);
-          // let url_sql
-          // try {
-          //   let data: any = await newAxios(url_sql, json);
-          // } catch (error) {
-          //   console.log('error: ', error);
-          // }
+          const save_sql = `triple-account/data-analysis/saveSql`;
+          try {
+            let data: any = await newAxios(save_sql, json);
+            if (data.data) {
+              notification.open({
+                message: 'save',
+                description: 'success!',
+                duration: 5,
+              });
+              this.setState({
+                modalOpen: false,
+                queryDescription_error: false,
+                queryName_error: false,
+                queryName: '',
+                queryDescription: '',
+              });
+            }
+          } catch (error) {
+            console.log('error: ', error);
+          }
         }
       } else {
         this.setState({

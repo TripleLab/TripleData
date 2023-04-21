@@ -1,16 +1,19 @@
 const axios = require('axios');
 
+let head = 'http://3.22.217.3:30020/';
+// let head = 'https://triplelab.xyz/v1/'
+
 export const newAxios = async (url: any, json: any) => {
   let key: any =
     localStorage.getItem('login-with-metamask:auth') &&
     JSON.parse(localStorage.getItem('login-with-metamask:auth') || '');
   // let token =
   //   'Bearer ' +
-  //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4YTc0ODJkMjg3MmNhMTVlMDE4NzM1YjhhYjBhMDAwMyIsImlubmVyLXRva2VuIjpmYWxzZSwiY3JlYXRlZCI6MTY4MTg4Njc3Mzc0MiwiZXhwIjoxNjg3ODg2NzczfQ.F5z2AB6EMlvXq0NT0FKdAPk8OH_LfZYTtkEJHyCNAr-Tky0JPASelsWYUfvjJN3aOAfIFH95-g5yCN1-0zNERQ';
+  //   'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiI4YTc0ODJkMjg3MmNhMTVlMDE4NzM1YjhhYjBhMDAwMyIsImlubmVyLXRva2VuIjpmYWxzZSwiY3JlYXRlZCI6MTY4MjA1NzQ5NTc0OSwiZXhwIjoxNjg4MDU3NDk1fQ.DwPUw53UtP7Gss-RhN8d3CTvPrqYabByk33d0wP6am_dHQUrxbszBEMwkSVm4Nnw_yToxXGgET62S_zDL3J9Mg';
   let token = 'Bearer ' + key.token;
   let callback;
   await axios({
-    url: url,
+    url: head + url,
     method: 'post',
     timeout: 60000,
     headers: {
