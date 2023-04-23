@@ -102,23 +102,10 @@ export default class SignInStore extends ApiRequestableStore {
     );
     await connectionsStorage.saveConnections(this.connectionList.map((_) => _.toJSON()));
   }
-  GetQueryString = (name: any) => {
-    var reg: any = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-    var r: any = window.location.search.substr(1).match(reg); //获取url中"?"符后的字符串并正则匹配
-    var context = '';
-    if (r != null) context = decodeURIComponent(r[2]);
-    reg = null;
-    r = null;
-    return context == null || context == '' || context == 'undefined' ? '' : context;
-  };
 
   signIn(history: History) {
     return this.submit(this.selectedConnection, async () => {
       const api = await Api.connect(this.selectedConnection.toJSON());
-      if(this.GetQueryString('code')){
-        console.log('th', this.GetQueryString('code'));
-        localStorage.setItem('code', this.GetQueryString('code'));
-      }
       this.rootStore.appStore.updateApi(Option.of(api));
       const { state: { from: path } = { from: routePaths.home.path } } = history.location; //  as FromLocationDescriptorObject;
       // history.push(path);
