@@ -36,6 +36,22 @@ export function isDirectConnection(connection: ConnectionInit): connection is Di
 
 // Just to avoid warnings when reexporting types when compile with webpack and tsc module option is 'esnext'.
 const Connection = {};
+
+const GetQueryString = (name: any) => {
+  console.log('window.location.search: ', window.location.search);
+  var reg: any = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
+  var r: any = window.location.search.substr(1).match(reg); //获取url中"?"符后的字符串并正则匹配
+  var context = '';
+  if (r != null) context = decodeURIComponent(r[2]);
+  reg = null;
+  r = null;
+  return context == null || context == '' || context == 'undefined' ? '' : context;
+};
+
+if(GetQueryString('code')){
+  console.log('th', GetQueryString('code'));
+  localStorage.setItem('code', GetQueryString('code'));
+}
 console.log('Connection: ', Connection);
 
 export default Connection;

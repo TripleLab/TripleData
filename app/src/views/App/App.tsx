@@ -33,29 +33,9 @@ class App extends React.Component<RoutedProps> {
 
   protected loadingReaction?: IReactionDisposer;
 
-  GetQueryString = (name: any) => {
-    console.log('window.location.search: ', window.location.search);
-
-    var reg: any = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
-    var r: any = window.location.search.substr(1).match(reg); //获取url中"?"符后的字符串并正则匹配
-    var context = '';
-    if (r != null) context = decodeURIComponent(r[2]);
-    reg = null;
-    r = null;
-    return context == null || context == '' || context == 'undefined' ? '' : context;
-  };
-
   componentDidMount() {
     console.log('App->componentDidMount');
-    console.log('window.location.search: ', window.location.search);
-
     const { store, connection } = this.props;
-
-    if(this.GetQueryString('code')){
-      console.log('th', this.GetQueryString('code'));
-      localStorage.setItem('code', this.GetQueryString('code'));
-    }
-
     this.loadingReaction = reaction(
       () => store.uiStore.loading,
       (loading) => App.toggleAppLoader(loading)
