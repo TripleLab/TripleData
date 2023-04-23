@@ -108,7 +108,7 @@ export default class SignInStore extends ApiRequestableStore {
       const api = await Api.connect(this.selectedConnection.toJSON());
       this.rootStore.appStore.updateApi(Option.of(api));
       const { state: { from: path } = { from: routePaths.home.path } } = history.location; //  as FromLocationDescriptorObject;
-      history.push(path);
+      // history.push(path);
     });
   }
 }
