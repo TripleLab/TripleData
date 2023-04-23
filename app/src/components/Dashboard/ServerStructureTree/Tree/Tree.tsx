@@ -22,10 +22,6 @@ if (VirtualizedTree['propTypes'] && VirtualizedTree['propTypes'].scrollToId) {
 /* eslint-enable */
 
 function Tree({ nodes, onChange, highlightedId, onCollapse, ...actions }: TreeProps) {
-  console.log('highlightedId: ', highlightedId);
-  console.log('nodes: ', nodes);
-console.log('defaultRenderers: ', defaultRenderers);
-
 
   return (
     <Flex grow className={css.root}>

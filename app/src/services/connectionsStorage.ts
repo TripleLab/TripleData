@@ -7,11 +7,9 @@ const key = 'connections';
 const lastActiveKey = `${key}.lastActive`;
 
 export async function get(): Promise<Connection[]> {
-  console.log('appStorage: ', appStorage);
 
   try {
     let list = await appStorage.getItem<Connection[]>(key);
-    console.log('list: ', list);
     // filter for dublicate by connectionName
     list = list.filter(
       (value, index, self) =>
@@ -38,10 +36,8 @@ export async function saveConnections(connections: ReadonlyArray<Connection>) {
 export async function getLastActiveConnection(): Promise<Option<Connection>> {
   try {
     const name = await appStorage.getItem<string | null>(lastActiveKey);
-    console.log('name: ', name);
     if (!name) return None;
     const lastConnection = (await get()).find((c) => c.connectionName === name);
-    console.log('lastConnection: ', lastConnection);
     return Option.of(lastConnection);
   } catch (e) {
     console.error(e);

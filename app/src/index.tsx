@@ -30,7 +30,6 @@ function render(
 (async () => {
   const rootStore = initStores();
   const connection = await connectionsStorage.getLastActiveConnection();
-  console.log('connection:111111111111 ', connection);
 
   render(appRootElement, App, { connection: connection.orUndefined() }, rootStore);
 

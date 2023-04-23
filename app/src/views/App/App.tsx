@@ -36,9 +36,6 @@ class App extends React.Component<RoutedProps> {
   componentDidMount() {
     console.log('App->componentDidMount');
     const { store, connection } = this.props;
-    console.log('this.props: ', this.props);
-    console.log('connection: ', connection);
-    console.log('store: ', store);
 
     this.loadingReaction = reaction(
       () => store.uiStore.loading,

@@ -105,9 +105,7 @@ export default class SignInStore extends ApiRequestableStore {
 
   signIn(history: History) {
     return this.submit(this.selectedConnection, async () => {
-      console.log('this.selectedConnection: ', this.selectedConnection);
       const api = await Api.connect(this.selectedConnection.toJSON());
-      console.log('api: ', api);
       this.rootStore.appStore.updateApi(Option.of(api));
       const { state: { from: path } = { from: routePaths.home.path } } = history.location; //  as FromLocationDescriptorObject;
       history.push(path);

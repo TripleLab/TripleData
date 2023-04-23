@@ -63,7 +63,6 @@ class ServerStructureTree extends React.Component<Props> {
 
   render() {
     const { store, children, ...actions } = this.props;
-    console.log('store22222222222: ', store);
 
     return (
       <Flex column fill id={'test'}>

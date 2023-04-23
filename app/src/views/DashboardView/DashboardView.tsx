@@ -250,7 +250,6 @@ class DashboardView extends React.Component<RoutedProps> {
         {/*<Menu.Item key={`${TabRightMenuAction.PinTab}#${id}`}>Pin tab</Menu.Item>*/}
       </Menu>
     );
-    console.log('tabsStore.tabs: ', tabsStore.tabs);
 
     return (
       <>

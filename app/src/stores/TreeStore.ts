@@ -114,8 +114,6 @@ export default class TreeStore extends ApiRequestableStore<DashboardUIStore> {
     server: ServerStructure.Server,
     attachItem: ServerStructure.SpecialArrayGroupItem
   ) {
-    console.log('server: ', server);
-    console.log('attachItem: ', attachItem);
 
     const children = server.databases.map((d) => ({
       ...d,
@@ -133,8 +131,6 @@ export default class TreeStore extends ApiRequestableStore<DashboardUIStore> {
       attachItem.children.forEach((n) => {
         cc.push(n);
       });
-      console.log('cc: ', cc);
-      console.log('server: ', server);
 
     this.treeNodes = [
       {

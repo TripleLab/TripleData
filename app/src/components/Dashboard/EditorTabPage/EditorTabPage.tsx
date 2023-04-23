@@ -59,6 +59,7 @@ export default class EditorTabPage extends React.Component<any, any> {
       queryName_error: '',
       queryDescription_error: '',
       newCode: '',
+      loading: false,
     };
   }
   stats?: Statistics;
@@ -152,6 +153,20 @@ export default class EditorTabPage extends React.Component<any, any> {
     //
   };
 
+  componentDidMount(): void {
+    let local = localStorage.getItem('code');
+    if (local) {
+      this.setState(
+        {
+          code: atob(local),
+        },
+        () => {
+          localStorage.removeItem('code');
+        }
+      );
+    }
+  }
+
   render() {
     const { store, serverStructure, model, width } = this.props;
     const resultList = model.queriesResult.map((r: { list: any }) => r.list).getOrElse([]);
@@ -187,6 +202,9 @@ export default class EditorTabPage extends React.Component<any, any> {
             description: this.state.queryDescription,
             querySql: this.state.newCode ? btoa(this.state.newCode) : btoa(model.content),
           };
+          this.setState({
+            loading: true,
+          });
           const save_sql = `triple-account/data-analysis/saveSql`;
           try {
             let data: any = await newAxios(save_sql, json);
@@ -202,6 +220,7 @@ export default class EditorTabPage extends React.Component<any, any> {
                 queryName_error: false,
                 queryName: '',
                 queryDescription: '',
+                loading: false,
               });
             }
           } catch (error) {
@@ -213,6 +232,7 @@ export default class EditorTabPage extends React.Component<any, any> {
           modalOpen: false,
           queryDescription_error: false,
           queryName_error: false,
+          loading: false,
           // queryName: '',
           // queryDescription: '',
         });
@@ -295,8 +315,6 @@ export default class EditorTabPage extends React.Component<any, any> {
             saveCallback={saveCallback}
             fill
           />
-
-          {/* position: 'absolute'  */}
           <div
             style={{
               padding: '10px 20px',
@@ -515,8 +533,11 @@ export default class EditorTabPage extends React.Component<any, any> {
                   fontWeight: 400,
                   width: '48%',
                   cursor: 'pointer',
+                  opacity: this.state.loading ? '0.5' : '1',
                 }}
-                onClick={() => close(1)}
+                onClick={() => {
+                  close(1);
+                }}
               >
                 Save
               </div>

@@ -22,7 +22,6 @@ function getItemLayout(
   };
 }
 export default function DataItemsLayout({ items, renderItem, onResize, ...rest }: Props) {
-  console.log('items: ', items);
   return (
     <GridLayout items={items} onResizeStop={onResize} getItemLayout={getItemLayout} {...rest}>
       {items.map((item) => (
