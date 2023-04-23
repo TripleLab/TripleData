@@ -34,6 +34,8 @@ class App extends React.Component<RoutedProps> {
   protected loadingReaction?: IReactionDisposer;
 
   GetQueryString = (name: any) => {
+    console.log('window.location.search: ', window.location.search);
+
     var reg: any = new RegExp('(^|&)' + name + '=([^&]*)(&|$)', 'i');
     var r: any = window.location.search.substr(1).match(reg); //获取url中"?"符后的字符串并正则匹配
     var context = '';
@@ -45,6 +47,8 @@ class App extends React.Component<RoutedProps> {
 
   componentDidMount() {
     console.log('App->componentDidMount');
+    console.log('window.location.search: ', window.location.search);
+
     const { store, connection } = this.props;
 
     if(this.GetQueryString('code')){
