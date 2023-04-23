@@ -50,6 +50,7 @@ class SignInView extends React.Component<RoutedProps> {
     //   this.checkVersionUpdateTabix();
     // }
     if(this.GetQueryString('code')){
+      console.log('th', this.GetQueryString('code'));
       localStorage.setItem('code', this.GetQueryString('code'));
     }
     store.loadConnections();

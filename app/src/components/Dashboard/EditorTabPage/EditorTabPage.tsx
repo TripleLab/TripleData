@@ -155,12 +155,14 @@ export default class EditorTabPage extends React.Component<any, any> {
 
   componentDidMount(): void {
     let local = localStorage.getItem('code');
+    console.log('local: ', local);
     if (local) {
       this.setState(
         {
           code: atob(local),
         },
         () => {
+          console.log('deldeldeldeldeldedledeldedledeldel');
           localStorage.removeItem('code');
         }
       );
