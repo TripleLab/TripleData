@@ -315,6 +315,7 @@ export default class EditorTabPage extends React.Component<any, any> {
             ref={this.setEditorRef}
             formatCode={formatCode}
             saveCallback={saveCallback}
+            store={store}
             fill
           />
           <div

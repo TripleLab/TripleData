@@ -9,7 +9,12 @@ import ActionButton, { Props as ActionButtonProps } from './ActionButton';
 import RequestStats from '../../RequestStats';
 import css from './Toolbar.css';
 import { CaretRightOutlined, ForwardOutlined, SaveOutlined } from '@ant-design/icons';
-import format_logo from '../../../../../assets/images/format.svg';
+import format_logo from '../../../../../assets/images/format.png';
+import save_logo from '../../../../../assets/images/save.png';
+import add_logo from '../../../../../assets/images/add.png';
+import enter_logo from '../../../../../assets/images/enter.png';
+import load_logo from '../../../../../assets/images/load.png';
+import mac_logo from '../../../../../assets/images/mac.png';
 
 export enum ActionType {
   Save = 1,
@@ -25,6 +30,8 @@ export interface ToolbarProps extends Pick<ActionButtonProps<ActionType>, 'onAct
   stats?: Statistics;
   formatCode?: any;
   saveCallback?: any;
+  store?: any;
+  content2?: any;
 }
 
 function SpaceH() {
@@ -50,8 +57,13 @@ export default class Toolbar extends React.Component<ToolbarProps & FlexProps> {
       stats,
       formatCode,
       saveCallback,
+      content2,
+      store,
       ...rest
     } = this.props;
+
+    // const { tabsStore:any } = this.props;
+    // const { uiStore } = tabsStore;
 
     const onActionMenuClick = (click: MenuInfo) => {
       onAction(parseInt(click.key, 0), click.domEvent);
@@ -78,26 +90,54 @@ export default class Toolbar extends React.Component<ToolbarProps & FlexProps> {
       <Flex alignItems="center" justifyContent="flex-end" style={{ background: 'rgb(30,30,30)' }}>
         <div
           className={css['button']}
+          id="hoverButton"
           onClick={formatCode}
           style={{ display: 'flex', alignItems: 'center' }}
         >
-          <img src={format_logo} alt="" style={{ marginRight: '10px' }} />
+          <img
+            src={format_logo}
+            alt=""
+            style={{ marginRight: '10px', height: '10px', marginTop: '2px' }}
+          />
           Format
         </div>
 
         <div
           className={css['button']}
+          id="hoverButton"
           onClick={saveCallback}
           style={{ display: 'flex', alignItems: 'center' }}
         >
-          <img src={format_logo} alt="" style={{ marginRight: '10px' }} />
+          <img src={save_logo} alt="" style={{ marginRight: '10px', height: '13px' }} />
           Save
         </div>
 
-        <div className={css['button']} onClick={onActionRunRunCurrent}>
-          ⌘ + ⏎ Run
+        <div
+          className={css['button']}
+          id="hoverButton"
+          onClick={onActionRunRunCurrent}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            background: !!store.uiStore.executingQueries.length ? '#5B616F' : '#34373C',
+          }}
+        >
+          {!!store.uiStore.executingQueries.length ? (
+            <img src={load_logo} alt="" style={{ marginRight: '10px', height: '13px' }} />
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <img src={mac_logo} alt="" style={{ marginRight: '5px', height: '13px' }} />
+              <img src={add_logo} alt="" style={{ marginRight: '5px', height: '9px' }} />
+              <img src={enter_logo} alt="" style={{ marginRight: '10px', height: '13px' }} />
+            </div>
+          )}
+          {/* {!!store.uiStore.executingQueries.length && (
+ 
+          )} */}
+          Run
         </div>
         <div style={{ height: '9px' }}></div>
+
         {/* <Flex grow justifyContent="flex-end">
           {stats && (
             <>

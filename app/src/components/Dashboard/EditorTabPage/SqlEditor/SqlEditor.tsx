@@ -102,6 +102,7 @@ export default class SqlEditor extends React.Component<SqlEditorProps> {
       onAction,
       formatCode,
       saveCallback,
+      store,
       className,
       ...rest
     } = this.props;
@@ -131,6 +132,8 @@ export default class SqlEditor extends React.Component<SqlEditorProps> {
           stats={stats}
           formatCode={formatCode}
           saveCallback={this.selectedCode}
+          store={store}
+          content2={content}
         />
       </Flex>
     );

@@ -173,3 +173,7 @@ body {
 :global(#input_save:focus) {
   box-shadow: none
 }
+
+:global(#hoverButton:hover) {
+  background: #5B616F !important
+}
