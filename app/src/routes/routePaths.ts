@@ -4,7 +4,7 @@ export default {
   signIn: { path: '/signin' },
   signOut: { path: '/signout' },
 
-  dashboard: { path: '/dashboard' },
+  dashboard: { path: '/data/dashboard' },
   // processes: { path: '/processes' },
   // metrics: { path: '/metrics' },
   // overview: {
