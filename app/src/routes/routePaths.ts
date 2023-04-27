@@ -1,8 +1,8 @@
 export default {
   home: { path: '/' },
 
-  signIn: { path: '/signin' },
-  signOut: { path: '/signout' },
+  signIn: { path: '/data/signin' },
+  signOut: { path: '/data/signout' },
 
   dashboard: { path: '/data/dashboard' },
   // processes: { path: '/processes' },
