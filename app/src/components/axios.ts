@@ -1,7 +1,7 @@
 const axios = require('axios');
 
-//let head = 'http://3.22.217.3:30020/';
-let head = 'https://triplelab.xyz/v1/'
+let head = 'http://3.133.159.68:30020/';
+//let head = 'https://triplelab.xyz/v1/'
 
 export const newAxios = async (url: any, json: any) => {
   let key: any =
